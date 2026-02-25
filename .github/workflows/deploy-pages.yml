@@ -37,6 +37,21 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Install Noto Sans JP font
+        run: |
+          mkdir -p ~/.local/share/fonts
+          curl -L -o ~/.local/share/fonts/NotoSansJP.ttf \
+            "https://github.com/google/fonts/raw/main/ofl/notosansjp/NotoSansJP%5Bwght%5D.ttf"
+          fc-cache -fv
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Generate PDFs
+        run: |
+          pnpm start &
+          npx tsx scripts/generate-pdf.ts
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
