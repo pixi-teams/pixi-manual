@@ -1,0 +1,63 @@
+name: Generate PDF Manuals
+
+on:
+  push:
+    tags:
+      - "manual-v*"
+
+permissions:
+  contents: write
+
+jobs:
+  generate-pdf:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install chromium --with-deps
+
+      - name: Build Next.js
+        run: pnpm build
+
+      - name: Start server and generate PDFs
+        run: |
+          # Start a simple static file server for the exported site
+          npx -y serve@latest out -l 3000 &
+          SERVER_PID=$!
+
+          # Wait for server to be ready
+          sleep 3
+
+          # Generate PDFs
+          pnpm exec tsx scripts/generate-pdf.ts
+
+          # Stop server
+          kill $SERVER_PID
+
+      - name: Upload PDFs as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pixi-manuals
+          path: public/manuals/*.pdf
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: public/manuals/*.pdf
+          generate_release_notes: true
