@@ -16,6 +16,7 @@ import path from "path";
 import fs from "fs";
 
 const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
+const BASE_PATH = process.env.GITHUB_ACTIONS ? "/pixi-manual" : "";
 const OUTPUT_DIR = path.join(process.cwd(), "public", "manuals");
 
 const roles = ["customer", "cast", "admin"] as const;
@@ -59,7 +60,7 @@ async function main() {
   const browser = await chromium.launch();
 
   for (const role of roles) {
-    const url = `${BASE_URL}/docs/${role}/book`;
+    const url = `${BASE_URL}${BASE_PATH}/docs/${role}/book`;
     const outputPath = path.join(OUTPUT_DIR, `pixi-manual-${role}.pdf`);
 
     console.log(`📄 Generating PDF for ${roleLabels[role]}...`);
