@@ -26,7 +26,31 @@ const roleLabels: Record<string, string> = {
   admin: "管理者向け",
 };
 
+/**
+ * サーバーが応答するまでリトライして待機する
+ */
+async function waitForServer(url: string, maxRetries = 30, intervalMs = 1000) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      await fetch(url);
+      console.log(`✅ Server is ready at ${url}`);
+      return;
+    } catch {
+      if (i === 0) {
+        console.log(`⏳ Waiting for server at ${url}...`);
+      }
+      await new Promise((resolve) => setTimeout(resolve, intervalMs));
+    }
+  }
+  throw new Error(
+    `Server at ${url} did not respond after ${(maxRetries * intervalMs) / 1000} seconds`,
+  );
+}
+
 async function main() {
+  // サーバーの起動を待機
+  await waitForServer(BASE_URL);
+
   // 出力ディレクトリを作成
   if (!fs.existsSync(OUTPUT_DIR)) {
     fs.mkdirSync(OUTPUT_DIR, { recursive: true });
