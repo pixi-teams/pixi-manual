@@ -13,8 +13,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-noto-sans-jp);
 
   /* pixi Brand Colors */
   --color-pixi-50: #f0f4f8;
@@ -41,7 +40,9 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), "Noto Sans JP", "Hiragino Sans", sans-serif;
+  font-family:
+    var(--font-sans), "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic",
+    "Meiryo", sans-serif;
 }
 
 /* ===========================
@@ -178,6 +179,9 @@ body {
     font-size: 11pt;
     color: #000;
     background: #fff;
+    font-family:
+      var(--font-sans), "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+      "Yu Gothic", "Meiryo", sans-serif;
   }
 
   .prose-manual {

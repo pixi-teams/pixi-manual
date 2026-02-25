@@ -80,12 +80,12 @@ async function main() {
       },
       displayHeaderFooter: true,
       headerTemplate: `
-        <div style="font-size: 9px; width: 100%; text-align: center; color: #999;">
+        <div style="font-size: 9px; width: 100%; text-align: center; color: #999; font-family: 'Noto Sans JP', 'Noto Sans CJK JP', sans-serif;">
           pixi マニュアル — ${roleLabels[role]}
         </div>
       `,
       footerTemplate: `
-        <div style="font-size: 9px; width: 100%; text-align: center; color: #999;">
+        <div style="font-size: 9px; width: 100%; text-align: center; color: #999; font-family: 'Noto Sans JP', 'Noto Sans CJK JP', sans-serif;">
           <span class="pageNumber"></span> / <span class="totalPages"></span>
         </div>
       `,
