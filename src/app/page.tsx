@@ -1,78 +1,95 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { roles, roleSections, sectionLabels } from "@/lib/mdx";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "pixi マニュアル",
   description: "pixi 操作マニュアル — ロール別入口",
 };
 
-const roles = [
-  {
-    id: "customer",
-    title: "お客様向け",
-    description: "Web予約の操作方法",
-    icon: "📱",
-    sections: ["Web予約"],
-  },
-  {
-    id: "cast",
-    title: "キャスト向け",
-    description: "Web予約・キャスト管理の操作方法",
-    icon: "👤",
-    sections: ["Web予約", "キャスト管理"],
-  },
-  {
-    id: "admin",
-    title: "管理者向け",
-    description: "全機能の操作方法",
-    icon: "⚙️",
-    sections: ["Web予約", "キャスト管理", "管理機能"],
-  },
-];
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-pixi-50 to-white">
-      <div className="max-w-4xl mx-auto px-6 py-20">
+    <div className="min-h-screen bg-background text-fg">
+      <header className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
+        <div className="flex items-center gap-2.5">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={`${BASE_PATH}/logo_v3.png`}
+            alt="pixi"
+            width={26}
+            height={26}
+            className="rounded"
+          />
+          <span className="font-semibold tracking-tight">pixi マニュアル</span>
+        </div>
+        <ThemeToggle />
+      </header>
+
+      <main className="mx-auto max-w-5xl px-6 pb-24 pt-12 sm:pt-20">
         {/* Hero */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-pixi-800 rounded-xl mb-6">
-            <span className="text-white text-2xl font-bold">P</span>
-          </div>
-          <h1 className="text-4xl font-bold text-pixi-900 mb-4">
+        <div className="mb-14 max-w-2xl">
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
             pixi マニュアル
           </h1>
-          <p className="text-lg text-gray-600 max-w-md mx-auto">
-            ご利用のロールを選択してください
+          <p className="mt-4 text-lg text-muted">
+            ご利用の立場にあわせて、操作マニュアルをご覧いただけます。
           </p>
         </div>
 
         {/* Role Cards */}
-        <div className="grid md:grid-cols-3 gap-6">
-          {roles.map((role) => (
-            <Link
-              key={role.id}
-              href={`/docs/${role.id}`}
-              className="group block bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md hover:border-pixi-300 transition-all duration-200"
-            >
-              <div className="text-3xl mb-4">{role.icon}</div>
-              <h2 className="text-lg font-semibold text-pixi-800 group-hover:text-pixi-600 transition-colors mb-2">
-                {role.title}
-              </h2>
-              <p className="text-sm text-gray-600 mb-4">{role.description}</p>
-              <div className="flex flex-wrap gap-2">
-                {role.sections.map((section) => (
-                  <span
-                    key={section}
-                    className="text-xs bg-pixi-50 text-pixi-700 px-2 py-1 rounded-full"
-                  >
-                    {section}
-                  </span>
-                ))}
-              </div>
-            </Link>
-          ))}
+        <div className="grid gap-5 md:grid-cols-3">
+          {roles.map((role) => {
+            const sections = (roleSections[role.key] ?? []).map(
+              (s) => sectionLabels[s] ?? s,
+            );
+            return (
+              <Link
+                key={role.key}
+                href={`/docs/${role.key}`}
+                data-role={role.key}
+                className="group flex flex-col rounded-xl border border-line bg-surface p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                style={{ borderTopWidth: 3, borderTopColor: "var(--accent)" }}
+              >
+                <span
+                  className="mb-4 inline-grid size-10 place-items-center rounded-lg text-lg font-bold"
+                  style={{
+                    background: "var(--accent-soft)",
+                    color: "var(--accent)",
+                  }}
+                >
+                  {role.label.charAt(0)}
+                </span>
+                <h2 className="text-lg font-semibold group-hover:text-accent">
+                  {role.label}
+                </h2>
+                <p className="mt-1 text-sm text-muted">{role.description}</p>
+                <div className="mt-4 flex flex-wrap gap-1.5">
+                  {sections.map((s) => (
+                    <span
+                      key={s}
+                      className="rounded-full border border-line px-2 py-0.5 text-xs text-muted"
+                    >
+                      {s}
+                    </span>
+                  ))}
+                </div>
+                <span className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-accent">
+                  マニュアルを開く →
+                </span>
+              </Link>
+            );
+          })}
         </div>
-      </div>
+      </main>
+
+      <footer className="border-t border-line">
+        <div className="mx-auto max-w-5xl px-6 py-6 text-sm text-muted">
+          &copy; {new Date().getFullYear()} pixi — マニュアル
+        </div>
+      </footer>
     </div>
   );
 }
