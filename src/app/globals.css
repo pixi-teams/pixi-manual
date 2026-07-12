@@ -6,85 +6,207 @@
   }
 }
 
-/* ===========================
+/* ダークモードは html.dark で切り替える（ThemeToggle + FOUC回避スクリプト） */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* =========================================================
    pixi マニュアル — Design System
-   =========================== */
+   地(chrome)はニュートラルグレーで統一し、
+   アクセントだけロール別に data-role で切り替える。
+   ========================================================= */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-noto-sans-jp);
+  --font-sans: var(--font-inter), var(--font-noto-sans-jp), "Hiragino Sans",
+    "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+  --font-mono: var(--font-roboto-mono), ui-monospace, SFMono-Regular, Menlo,
+    monospace;
 
-  /* pixi Brand Colors */
-  --color-pixi-50: #f0f4f8;
-  --color-pixi-100: #d9e2ec;
-  --color-pixi-200: #bcccdc;
-  --color-pixi-300: #9fb3c8;
-  --color-pixi-400: #829ab1;
-  --color-pixi-500: #627d98;
-  --color-pixi-600: #486581;
-  --color-pixi-700: #334e68;
-  --color-pixi-800: #1e3a5f;
-  --color-pixi-900: #102a43;
+  /* セマンティックカラー（値は :root / .dark で定義） */
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-fg: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-2: var(--muted-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-fg: var(--accent-fg);
+
+  --radius-card: 12px;
+  --radius-md: 10px;
+  --radius-sm: 8px;
 }
 
+/* ---------- ライトテーマ（既定） ---------- */
 :root {
   --background: #ffffff;
-  --foreground: #1a1a2e;
+  --surface: #ffffff;
+  --surface-2: #f8fafc;
+  --surface-3: #f1f5f9;
+
+  --foreground: #1e293b;
+  --muted: #64748b;
+  --muted-2: #94a3b8;
+
+  --line: #e2e8f0;
+  --line-strong: #cbd5e1;
+
+  --code-bg: #f1f5f9;
+  --code-fg: #be185d;
+  --pre-bg: #0f172a;
+  --pre-fg: #e2e8f0;
+
+  /* アクセント既定値（ロール未指定時はインディゴ）。
+     data-role で --accent / --accent-fg を上書きする。 */
+  --accent: #3f51b5;
+  --accent-fg: #ffffff;
+  --accent-hover: color-mix(in srgb, var(--accent) 84%, #000);
+  --accent-soft: color-mix(in srgb, var(--accent) 10%, transparent);
+  --accent-border: color-mix(in srgb, var(--accent) 32%, transparent);
+
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
 }
 
-/* ===========================
-   Base Typography
-   =========================== */
+/* ---------- ダークテーマ ---------- */
+.dark {
+  --background: #0b1120;
+  --surface: #0f172a;
+  --surface-2: #131f36;
+  --surface-3: #1c2942;
+
+  --foreground: #e6ebf4;
+  --muted: #94a3b8;
+  --muted-2: #64748b;
+
+  --line: #233149;
+  --line-strong: #33456a;
+
+  --code-bg: #1c2942;
+  --code-fg: #f9a8d4;
+  --pre-bg: #0a1122;
+  --pre-fg: #dbe3f0;
+
+  --accent-fg: #ffffff;
+  --accent-hover: color-mix(in srgb, var(--accent) 82%, #fff);
+  --accent-soft: color-mix(in srgb, var(--accent) 20%, transparent);
+  --accent-border: color-mix(in srgb, var(--accent) 42%, transparent);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* ---------- ロール別アクセント ---------- */
+/* お客様 = 予約サイト(reserve) ティール */
+[data-role="customer"] {
+  --accent: #019b98;
+}
+/* キャスト = キャストアプリ(cast) ピンク */
+[data-role="cast"] {
+  --accent: #ff4081;
+}
+/* 管理者 = 管理画面(admin) インディゴ */
+[data-role="admin"] {
+  --accent: #3f51b5;
+}
+/* ダークではティールを少し明るく */
+.dark [data-role="customer"] {
+  --accent: #22c3bf;
+}
+.dark [data-role="admin"] {
+  --accent: #7986cb;
+}
+
+/* =========================================================
+   Base
+   ========================================================= */
+* {
+  border-color: var(--line);
+}
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family:
-    var(--font-sans), "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic",
-    "Meiryo", sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ===========================
-   Prose Styles (Manual Content)
-   =========================== */
+::selection {
+  background: var(--accent-soft);
+}
 
+/* スクロール時のアンカー余白（固定ヘッダー分） */
+html {
+  scroll-padding-top: 5rem;
+}
+
+/* =========================================================
+   Prose（マニュアル本文） — すべて変数参照
+   ========================================================= */
 .prose-manual {
-  line-height: 1.85;
+  line-height: 1.9;
   font-size: 0.95rem;
-  color: #334155;
+  color: var(--foreground);
+  max-width: none;
 }
 
 .prose-manual h1 {
-  font-size: 1.75rem;
+  font-size: 1.9rem;
   font-weight: 700;
-  color: #1e3a5f;
-  border-bottom: 2px solid #486581;
-  padding-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
   margin-bottom: 1.5rem;
-  margin-top: 2.5rem;
+  scroll-margin-top: 5rem;
 }
 
 .prose-manual h2 {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #334e68;
-  margin-top: 2.5rem;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin-top: 2.75rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--line);
+  scroll-margin-top: 5rem;
 }
 
 .prose-manual h3 {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #486581;
-  margin-top: 1.75rem;
-  margin-bottom: 0.75rem;
+  color: var(--foreground);
+  margin-top: 1.9rem;
+  margin-bottom: 0.7rem;
+  scroll-margin-top: 5rem;
+}
+
+/* H2 見出しの左にアクセントのアクセントバー */
+.prose-manual h2::before {
+  content: "";
+  display: inline-block;
+  width: 0.3rem;
+  height: 1.05em;
+  margin-right: 0.6rem;
+  vertical-align: -0.12em;
+  border-radius: 2px;
+  background: var(--accent);
 }
 
 .prose-manual p {
   margin-bottom: 1rem;
+}
+
+.prose-manual a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+.prose-manual a:hover {
+  color: var(--accent-hover);
 }
 
 .prose-manual ul {
@@ -92,44 +214,48 @@ body {
   padding-left: 1.5rem;
   margin-bottom: 1rem;
 }
-
 .prose-manual ol {
   list-style-type: decimal;
   padding-left: 1.5rem;
   margin-bottom: 1rem;
 }
-
 .prose-manual li {
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.4rem;
+}
+.prose-manual li::marker {
+  color: var(--accent);
 }
 
 .prose-manual blockquote {
-  background: #f0f4f8;
-  border-left: 4px solid #486581;
-  padding: 1rem 1.25rem;
+  background: var(--accent-soft);
+  border-left: 3px solid var(--accent);
+  padding: 0.85rem 1.15rem;
   margin: 1.5rem 0;
-  border-radius: 0 0.375rem 0.375rem 0;
-  color: #334e68;
-  font-size: 0.9rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--foreground);
+}
+.prose-manual blockquote p:last-child {
+  margin-bottom: 0;
 }
 
 .prose-manual code {
-  background: #f1f5f9;
+  background: var(--code-bg);
   padding: 0.15rem 0.4rem;
-  border-radius: 0.25rem;
+  border-radius: 5px;
   font-size: 0.85em;
-  color: #475569;
+  color: var(--code-fg);
+  font-family: var(--font-mono);
 }
 
 .prose-manual pre {
-  background: #1e293b;
-  color: #e2e8f0;
+  background: var(--pre-bg);
+  color: var(--pre-fg);
   padding: 1rem 1.25rem;
-  border-radius: 0.5rem;
+  border-radius: var(--radius-md);
   overflow-x: auto;
   margin: 1.25rem 0;
+  font-size: 0.85rem;
 }
-
 .prose-manual pre code {
   background: none;
   padding: 0;
@@ -140,82 +266,91 @@ body {
   width: 100%;
   border-collapse: collapse;
   margin: 1.25rem 0;
+  font-size: 0.9rem;
+  display: block;
+  overflow-x: auto;
 }
-
 .prose-manual th,
 .prose-manual td {
-  border: 1px solid #e2e8f0;
-  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--line);
+  padding: 0.55rem 0.8rem;
   text-align: left;
 }
-
 .prose-manual th {
-  background: #f8fafc;
+  background: var(--surface-2);
   font-weight: 600;
-  color: #334e68;
 }
 
-/* Section spacing (40px+) */
-.prose-manual > * + h1,
-.prose-manual > * + h2 {
-  margin-top: 3rem;
+.prose-manual hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 2.5rem 0;
 }
 
-/* ===========================
-   Book View
-   =========================== */
+/* スクショ画像のフレーム化 */
+.prose-manual img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.25rem auto;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  background: var(--surface-2);
+}
 
+.prose-manual > *:first-child {
+  margin-top: 0;
+}
+
+/* =========================================================
+   Book View（PDF/通し読み用）
+   ========================================================= */
 .book-view article + article {
   padding-top: 2rem;
-  border-top: 1px solid #e2e8f0;
 }
 
-/* ===========================
-   Print Styles
-   =========================== */
-
+/* =========================================================
+   Print
+   ========================================================= */
 @media print {
-  body {
-    font-size: 11pt;
-    color: #000;
-    background: #fff;
-    font-family:
-      var(--font-sans), "Hiragino Sans", "Hiragino Kaku Gothic ProN",
-      "Yu Gothic", "Meiryo", sans-serif;
+  :root {
+    --background: #fff;
+    --foreground: #000;
+    --surface: #fff;
+    --surface-2: #f5f5f5;
+    --line: #ddd;
+    --line-strong: #bbb;
+    --accent: #333;
+    --accent-soft: #f5f5f5;
   }
 
-  .prose-manual {
+  body {
+    font-size: 11pt;
+    background: #fff;
     color: #000;
   }
 
   .prose-manual h1 {
     page-break-before: always;
-    color: #000;
-    border-bottom-color: #333;
   }
-
   .prose-manual h1:first-child {
     page-break-before: auto;
   }
-
   .prose-manual h2,
   .prose-manual h3 {
     page-break-after: avoid;
-    color: #000;
   }
-
-  .prose-manual blockquote {
-    background: #f5f5f5;
-    border-left-color: #333;
-  }
-
   .book-view article {
     page-break-inside: avoid;
   }
 
-  /* Hide interactive elements */
+  /* サイトのクロームは印刷しない */
   header,
-  footer {
+  footer,
+  aside,
+  nav,
+  .no-print {
     display: none !important;
   }
 
