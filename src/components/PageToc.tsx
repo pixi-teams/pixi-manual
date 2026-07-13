@@ -43,18 +43,18 @@ export const PageToc = ({ headings }: PageTocProps) => {
       <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-2">
         このページの内容
       </p>
-      <ul className="space-y-1 border-l border-line">
+      <ul className="space-y-1">
         {headings.map((h) => {
           const isActive = activeId === h.id;
           return (
-            <li key={h.id} className={h.depth === 3 ? "pl-4" : undefined}>
+            <li key={h.id} className={h.depth === 3 ? "pl-3" : undefined}>
               <a
                 href={`#${h.id}`}
                 aria-current={isActive ? "location" : undefined}
-                className={`-ml-px block border-l-2 py-0.5 pl-3 transition-colors ${
+                className={`block py-0.5 transition-colors ${
                   isActive
-                    ? "border-accent font-medium text-accent-ink"
-                    : "border-transparent text-muted hover:border-line-strong hover:text-fg"
+                    ? "font-medium text-fg"
+                    : "text-muted hover:text-fg"
                 }`}
               >
                 {h.text}

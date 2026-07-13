@@ -8,14 +8,14 @@ Next.js (App Router / static export) + Tailwind CSS v4 + next-mdx-remote で構�
 UI は 3 カラム docs レイアウト（左サイドバー + 本文 + 右 PageToc）で、
 Pagefind によるクライアント検索・ダークモード・パンくず・前後ページ送りを備える。
 
-### ロール別アクセント色（実アプリのブランド色に準拠）
+### デザイン方針（Notion 風・完全モノトーン）
 
-地(chrome)はニュートラルグレーで統一し、アクセントだけロール別に切り替える。
-`data-role` 属性を祖先要素に付けると CSS 変数 `--accent` が切り替わる（globals.css）。
+デザインの正本は **`DESIGN.md`**（設計原則 + デザイントークン定義）。UI 変更時は必ず参照する。
 
-- customer（予約サイト reserve）= ティール `#019B98`
-- cast（キャストアプリ cast）= ピンク `#FF4081`
-- admin（管理画面 admin）= インディゴ `#3F51B5`
+地(chrome)もアクセントも **無彩色（温かい中立グレー）** で統一する。文字色は `#37352F` 系。
+ロール（customer / cast / admin）は **色で区別せず**、ラベル・パンくず・URL で識別する。
+かつてのロール別ブランド色（ティール/ピンク/インディゴ）と `data-role` によるアクセント切替は **撤廃済み**。
+`data-role` 属性はマークアップに残るが `--accent` は切り替えない。
 
 ## コーディング規約
 
@@ -49,10 +49,11 @@ Pagefind によるクライアント検索・ダークモード・パンくず�
 
 ### スタイル
 
-- Tailwind CSS v4（`@theme inline` でセマンティックカラーを定義）
+- Tailwind CSS v4（`@theme inline` でセマンティックカラーを定義）。トークンの正本は `DESIGN.md`
 - 色はハードコードせず変数を使う: 地は `--color-surface/-2/-3`・`--color-fg`・`--color-muted`・`--color-line`、
-  アクセントは `--color-accent`（= `--accent`、`data-role` で切替）・`--color-accent-soft`
-- 本文は `prose-manual` クラス（すべて上記変数参照）
+  アクセントは無彩色単一の `--color-accent`（= `--accent`）・`--color-accent-ink`・`--color-accent-soft`
+- 本文は `prose-manual` クラス（すべて上記変数参照）。見出しに装飾バー・下線は付けない
+- 影は原則不使用（オーバーレイのみ `--shadow`）。角丸は 4/6/8/10px。絵文字は UI に使わず SVG アイコンで
 - ダークモードは `html.dark` クラス + `@custom-variant dark`。初期適用は layout.tsx の inline スクリプト（FOUC 回避）
 - 印刷用スタイルは `@media print`、`@custom-variant print` も定義済み
 

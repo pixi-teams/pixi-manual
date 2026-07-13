@@ -53,10 +53,9 @@ export default function HomePage() {
                 key={role.key}
                 href={`/docs/${role.key}`}
                 data-role={role.key}
-                className="group relative flex flex-col overflow-hidden rounded-lg border border-line bg-surface p-6 transition-colors hover:border-line-strong hover:bg-surface-2"
+                className="group flex flex-col rounded-lg border border-line bg-surface p-6 transition-colors hover:border-line-strong hover:bg-surface-2"
               >
-                <span className="absolute inset-x-0 top-0 h-0.5 bg-accent" />
-                <span className="mb-4 inline-grid size-10 place-items-center rounded-lg bg-accent-soft text-lg font-bold text-accent-ink">
+                <span className="mb-4 inline-grid size-10 place-items-center rounded-md border border-line bg-surface-2 text-lg font-semibold text-fg">
                   {role.label.charAt(0)}
                 </span>
                 <h2 className="text-lg font-semibold">{role.label}</h2>
@@ -71,7 +70,7 @@ export default function HomePage() {
                     </span>
                   ))}
                 </div>
-                <span className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-accent-ink">
+                <span className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-fg">
                   マニュアルを開く
                   <svg
                     width="14"

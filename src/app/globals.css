@@ -39,125 +39,104 @@
   --color-accent-soft: var(--accent-soft);
   --color-accent-fg: var(--accent-fg);
 
-  /* 角丸は Tailwind の rounded-{sm,md,lg,xl} に対応（ミニマル寄りに小さめ） */
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 10px;
-  --radius-xl: 12px;
+  /* 角丸は Tailwind の rounded-{sm,md,lg,xl} に対応（Notion 基調のミニマル） */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 10px;
 }
 
 /* ---------- ライトテーマ（既定） ---------- */
 :root {
   --background: #ffffff;
   --surface: #ffffff;
-  --surface-2: #f6f7f9;
-  --surface-3: #eceff4;
+  --surface-2: #f7f7f5; /* サイドバー等の淡い地（Notion rgb(251,251,250)相当） */
+  --surface-3: #efefec; /* ホバー面・一段沈んだ面 */
 
-  --foreground: #0f172a;
-  --muted: #525c6e;
-  --muted-2: #8a94a6;
+  --foreground: #37352f; /* 温かいダークグレー（Notion text） */
+  --muted: #6b675e; /* rgba(55,53,47,.65)相当 */
+  --muted-2: #9b978d; /* rgba(55,53,47,.45)相当 */
 
-  --line: #e6e9ef;
-  --line-strong: #cfd5df;
+  --line: rgba(55, 53, 47, 0.09); /* 極薄罫線 */
+  --line-strong: rgba(55, 53, 47, 0.16);
 
-  --code-bg: #f1f3f7;
-  --code-fg: #b21e63;
-  --pre-bg: #0f172a;
-  --pre-fg: #e2e8f0;
+  --code-bg: #f4f4f2;
+  --code-fg: #37352f; /* インラインコードも無彩色 */
+  --pre-bg: #f7f7f5; /* コードブロックも淡グレー（濃紺やめ） */
+  --pre-fg: #37352f;
 
-  /* アクセント既定値（ロール未指定時はインディゴ）。
-     data-role で --accent を上書きする。 */
-  --accent: #3f51b5;
+  /* モノトーン: アクセントは無彩色（前景と同系）。ロール別上書きは撤廃。 */
+  --accent: #37352f;
   --accent-fg: #ffffff;
-  /* テキスト/操作系（AA準拠）: ブランド色を暗く寄せる */
-  --accent-ink: color-mix(in srgb, var(--accent) 76%, #000);
-  --accent-hover: color-mix(in srgb, var(--accent-ink) 88%, #000);
-  --accent-soft: color-mix(in srgb, var(--accent) 8%, transparent);
-  --accent-border: color-mix(in srgb, var(--accent) 30%, transparent);
+  --accent-ink: #1f1e1b; /* リンク/操作テキスト（ほぼ黒） */
+  --accent-hover: #000000;
+  --accent-soft: rgba(55, 53, 47, 0.06); /* ホバー/選択の淡い地 */
+  --accent-border: rgba(55, 53, 47, 0.16);
 
-  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
-  --shadow: 0 8px 28px rgba(15, 23, 42, 0.1);
+  /* 影は原則不使用。区切りは罫線で。--shadow はオーバーレイ専用。 */
+  --shadow-sm: none;
+  --shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
 
-  /* Callout（両テーマで視認可能な淡色） */
-  --callout-note-fg: #1e4e8c;
-  --callout-note-bg: #eff5fc;
-  --callout-note-border: #3b82f6;
-  --callout-tip-fg: #166534;
-  --callout-tip-bg: #edf9f0;
-  --callout-tip-border: #22c55e;
-  --callout-warning-fg: #92500e;
-  --callout-warning-bg: #fdf6ea;
-  --callout-warning-border: #f59e0b;
-  --callout-step-fg: #5b3aa8;
-  --callout-step-bg: #f3f1fc;
-  --callout-step-border: #8b5cf6;
+  /* Callout はモノトーン地に統一（区別はラベル/アイコン）。警告のみ罫を濃く。 */
+  --callout-note-fg: #37352f;
+  --callout-note-bg: #f7f7f5;
+  --callout-note-border: rgba(55, 53, 47, 0.16);
+  --callout-tip-fg: #37352f;
+  --callout-tip-bg: #f7f7f5;
+  --callout-tip-border: rgba(55, 53, 47, 0.16);
+  --callout-warning-fg: #37352f;
+  --callout-warning-bg: #f7f7f5;
+  --callout-warning-border: rgba(55, 53, 47, 0.45);
+  --callout-step-fg: #37352f;
+  --callout-step-bg: #f7f7f5;
+  --callout-step-border: rgba(55, 53, 47, 0.16);
 }
 
-/* ---------- ダークテーマ ---------- */
+/* ---------- ダークテーマ（Notion dark 準拠・モノトーン） ---------- */
 .dark {
-  --background: #0b1120;
-  --surface: #0f172a;
-  --surface-2: #111c33;
-  --surface-3: #1a2740;
+  --background: #191919;
+  --surface: #202020;
+  --surface-2: #262626;
+  --surface-3: #2f2f2f;
 
-  --foreground: #e8edf5;
-  --muted: #9aa6bb;
-  --muted-2: #5b6577;
+  --foreground: #e6e6e4; /* rgba(255,255,255,.81)相当 */
+  --muted: #9b9a97;
+  --muted-2: #6f6e6b;
 
-  --line: #22304a;
-  --line-strong: #33455f;
+  --line: rgba(255, 255, 255, 0.094);
+  --line-strong: rgba(255, 255, 255, 0.16);
 
-  --code-bg: #17233c;
-  --code-fg: #f9a8d4;
-  --pre-bg: #0a1122;
-  --pre-fg: #dbe3f0;
+  --code-bg: #2a2a2a;
+  --code-fg: #e6e6e4;
+  --pre-bg: #202020;
+  --pre-fg: #e6e6e4;
 
-  --accent-fg: #ffffff;
-  --accent-ink: color-mix(in srgb, var(--accent) 86%, #fff);
-  --accent-hover: color-mix(in srgb, var(--accent-ink) 88%, #fff);
-  --accent-soft: color-mix(in srgb, var(--accent) 22%, transparent);
-  --accent-border: color-mix(in srgb, var(--accent) 42%, transparent);
+  --accent: #e6e6e4;
+  --accent-fg: #191919;
+  --accent-ink: #ffffff;
+  --accent-hover: #ffffff;
+  --accent-soft: rgba(255, 255, 255, 0.07);
+  --accent-border: rgba(255, 255, 255, 0.16);
 
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+  --shadow-sm: none;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 
-  --callout-note-fg: #a7c8f5;
-  --callout-note-bg: rgba(59, 130, 246, 0.13);
-  --callout-note-border: #3b82f6;
-  --callout-tip-fg: #8fe3ab;
-  --callout-tip-bg: rgba(34, 197, 94, 0.13);
-  --callout-tip-border: #22c55e;
-  --callout-warning-fg: #f5c67e;
-  --callout-warning-bg: rgba(245, 158, 11, 0.14);
-  --callout-warning-border: #f59e0b;
-  --callout-step-fg: #c7b4f2;
-  --callout-step-bg: rgba(139, 92, 246, 0.16);
-  --callout-step-border: #8b5cf6;
+  --callout-note-fg: #e6e6e4;
+  --callout-note-bg: #262626;
+  --callout-note-border: rgba(255, 255, 255, 0.16);
+  --callout-tip-fg: #e6e6e4;
+  --callout-tip-bg: #262626;
+  --callout-tip-border: rgba(255, 255, 255, 0.16);
+  --callout-warning-fg: #e6e6e4;
+  --callout-warning-bg: #262626;
+  --callout-warning-border: rgba(255, 255, 255, 0.4);
+  --callout-step-fg: #e6e6e4;
+  --callout-step-bg: #262626;
+  --callout-step-border: rgba(255, 255, 255, 0.16);
 }
 
-/* ---------- ロール別アクセント（ブランド色を維持） ---------- */
-/* お客様 = 予約サイト(reserve) ティール */
-[data-role="customer"] {
-  --accent: #019b98;
-}
-/* キャスト = キャストアプリ(cast) ピンク */
-[data-role="cast"] {
-  --accent: #ff4081;
-}
-/* 管理者 = 管理画面(admin) インディゴ */
-[data-role="admin"] {
-  --accent: #3f51b5;
-}
-/* ダークでは装飾用のブランド色を少し明るく（--accent-ink は各テーマ式で追従） */
-.dark [data-role="customer"] {
-  --accent: #22c3bf;
-}
-.dark [data-role="cast"] {
-  --accent: #ff5f95;
-}
-.dark [data-role="admin"] {
-  --accent: #7986cb;
-}
+/* ロール別アクセント色は撤廃（完全モノトーン）。
+   data-role 属性は識別用途で残るが --accent は切り替えない。 */
 
 /* =========================================================
    Base
@@ -205,48 +184,33 @@ html {
   font-size: 2rem;
   line-height: 1.25;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
   color: var(--foreground);
   margin-bottom: 1.5rem;
   scroll-margin-top: 5rem;
 }
 
+/* 序列は余白とウェイトで表現する（装飾バー・下線は使わない） */
 .prose-manual h2 {
-  display: flex;
-  align-items: center;
   font-size: 1.5rem;
   line-height: 1.3;
-  font-weight: 650;
-  letter-spacing: -0.01em;
+  font-weight: 600;
+  letter-spacing: -0.005em;
   color: var(--foreground);
   margin-top: 2.75rem;
   margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--line);
   scroll-margin-top: 5rem;
 }
 
 .prose-manual h3 {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   line-height: 1.4;
   font-weight: 600;
-  letter-spacing: -0.005em;
+  letter-spacing: 0;
   color: var(--foreground);
   margin-top: 2rem;
   margin-bottom: 0.7rem;
   scroll-margin-top: 5rem;
-}
-
-/* H2 見出しの左に控えめなアクセントバー */
-.prose-manual h2::before {
-  content: "";
-  display: inline-block;
-  flex: none;
-  width: 3px;
-  height: 1.05em;
-  margin-right: 0.6rem;
-  border-radius: 2px;
-  background: var(--accent);
 }
 
 .prose-manual p {
@@ -446,10 +410,10 @@ html {
     --accent: #333;
     --accent-ink: #222;
     --accent-soft: #f5f5f5;
-    --callout-note-bg: #f4f8fd;
-    --callout-tip-bg: #f2fbf5;
-    --callout-warning-bg: #fdf8ee;
-    --callout-step-bg: #f6f3fd;
+    --callout-note-bg: #f5f5f4;
+    --callout-tip-bg: #f5f5f4;
+    --callout-warning-bg: #f5f5f4;
+    --callout-step-bg: #f5f5f4;
   }
 
   body {

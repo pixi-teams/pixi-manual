@@ -46,7 +46,7 @@ export default async function RoleIndexPage({
   return (
     <AppShell role={role}>
       <div className="mb-10">
-        <p className="mb-2 text-sm font-medium text-accent-ink">
+        <p className="mb-2 text-sm font-medium text-muted">
           {roleMeta.label}
         </p>
         <h1 className="text-3xl font-bold tracking-tight text-fg">
@@ -58,8 +58,7 @@ export default async function RoleIndexPage({
       <div className="flex flex-col gap-10">
         {nav.map((section) => (
           <section key={section.section}>
-            <h2 className="mb-4 flex items-center gap-2.5 text-lg font-semibold text-fg">
-              <span className="inline-block h-5 w-1 rounded bg-accent" />
+            <h2 className="mb-4 text-lg font-semibold text-fg">
               {section.label}
             </h2>
             <div className="grid gap-3 sm:grid-cols-2">

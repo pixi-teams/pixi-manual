@@ -49,13 +49,12 @@ export const SidebarNav = ({
                 data-role={r.key}
                 onClick={onNavigate}
                 aria-current={active ? "page" : undefined}
-                className={`flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition-colors ${
+                className={`flex items-center rounded-md px-2.5 py-2 text-sm transition-colors ${
                   active
                     ? "bg-surface-2 font-semibold text-fg"
                     : "text-muted hover:bg-surface-2 hover:text-fg"
                 }`}
               >
-                <span className="size-2 shrink-0 rounded-full bg-accent" />
                 {r.label}
               </Link>
             );
@@ -70,7 +69,7 @@ export const SidebarNav = ({
             <p className="mb-1.5 px-1 text-xs font-semibold uppercase tracking-wide text-muted-2">
               {sectionNav.label}
             </p>
-            <ul className="flex flex-col gap-0.5 border-l border-line">
+            <ul className="flex flex-col gap-0.5">
               {sectionNav.items.map((item) => {
                 const active = pathname === normalize(item.href);
                 return (
@@ -79,10 +78,10 @@ export const SidebarNav = ({
                       href={item.href}
                       onClick={onNavigate}
                       aria-current={active ? "page" : undefined}
-                      className={`-ml-px block border-l-2 py-1.5 pl-3 text-sm transition-colors ${
+                      className={`block rounded-md px-2.5 py-1.5 text-sm transition-colors ${
                         active
-                          ? "border-accent font-medium text-accent-ink"
-                          : "border-transparent text-muted hover:border-line-strong hover:text-fg"
+                          ? "bg-surface-2 font-medium text-fg"
+                          : "text-muted hover:bg-surface-2 hover:text-fg"
                       }`}
                     >
                       {item.title}

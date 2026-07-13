@@ -25,7 +25,7 @@ export const Figure = ({ src, alt, caption }: FigureProps) => {
         <img
           src={resolvedSrc}
           alt={alt}
-          className="mx-auto block h-auto max-w-full rounded-md border border-line-strong bg-surface-2 shadow-sm"
+          className="mx-auto block h-auto max-w-full rounded-md border border-line-strong bg-surface-2"
         />
       ) : (
         <div
@@ -33,9 +33,24 @@ export const Figure = ({ src, alt, caption }: FigureProps) => {
           aria-label={`スクリーンショット準備中${alt ? `：${alt}` : ""}`}
           className="grid min-h-40 place-items-center rounded-md border border-dashed border-line-strong bg-surface-2 px-4 text-center text-sm text-muted"
         >
-          <span>
-            <span aria-hidden>🖼️</span> スクリーンショット準備中
-            {alt ? `：${alt}` : ""}
+          <span className="inline-flex items-center gap-2">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-muted-2"
+              aria-hidden
+            >
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <circle cx="9" cy="9" r="1.5" />
+              <path d="m21 15-4.5-4.5L6 21" />
+            </svg>
+            スクリーンショット準備中{alt ? `：${alt}` : ""}
           </span>
         </div>
       )}
