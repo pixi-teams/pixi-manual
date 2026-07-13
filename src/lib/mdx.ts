@@ -114,8 +114,20 @@ export const getDocsBySections = (sectionDirs: string[]): DocEntry[] => {
  */
 export const roleSections: Record<string, string[]> = {
   customer: ["10-web-reservation"],
-  cast: ["10-web-reservation", "20-cast-management"],
-  admin: ["10-web-reservation", "20-cast-management", "30-admin"],
+  cast: [
+    "20-cast-basics",
+    "30-cast-schedule-shift",
+    "40-cast-reservations",
+    "50-cast-customers",
+    "60-cast-report-mypage",
+  ],
+  admin: [
+    "30-admin-basics",
+    "40-admin-operations",
+    "50-admin-management",
+    "60-admin-accounting",
+    "70-admin-settings",
+  ],
 };
 
 /**
@@ -123,8 +135,18 @@ export const roleSections: Record<string, string[]> = {
  */
 export const sectionLabels: Record<string, string> = {
   "10-web-reservation": "Web予約",
-  "20-cast-management": "キャスト管理",
-  "30-admin": "管理機能",
+  // cast（pixi-cast アプリ）
+  "20-cast-basics": "はじめに・基本操作",
+  "30-cast-schedule-shift": "スケジュール・シフト",
+  "40-cast-reservations": "予約管理",
+  "50-cast-customers": "顧客",
+  "60-cast-report-mypage": "レポート・マイページ",
+  // admin（pixi-admin 管理画面）
+  "30-admin-basics": "はじめに・ログイン",
+  "40-admin-operations": "日々の運用",
+  "50-admin-management": "店舗運営の管理",
+  "60-admin-accounting": "経理",
+  "70-admin-settings": "店舗設定",
 };
 
 /**
@@ -139,7 +161,7 @@ export const roles: RoleMeta[] = [
   {
     key: "cast",
     label: "キャスト向け",
-    description: "Web予約・キャスト管理の操作方法",
+    description: "キャストアプリの操作方法",
   },
   {
     key: "admin",
