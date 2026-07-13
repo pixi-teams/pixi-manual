@@ -25,20 +25,20 @@ export const AppShell = ({ role, headings, children }: AppShellProps) => {
     <div data-role={role} className="min-h-screen bg-background text-fg">
       <TopBar role={role} roles={roles} nav={nav} pdfHref={`/docs/${role}/book`} />
 
-      <div className="mx-auto flex w-full max-w-[1400px] gap-8 px-4">
+      <div className="mx-auto flex w-full max-w-[1360px] gap-8 px-4 sm:px-6 lg:gap-10 lg:px-8">
         {/* 左サイドバー（デスクトップ） */}
-        <aside className="no-print sticky top-14 hidden h-[calc(100vh-3.5rem)] w-60 shrink-0 overflow-y-auto py-8 pr-2 lg:block">
+        <aside className="no-print sticky top-14 hidden h-[calc(100vh-3.5rem)] w-64 shrink-0 overflow-y-auto py-8 pr-2 lg:block">
           <SidebarNav role={role} roles={roles} nav={nav} />
         </aside>
 
         {/* 本文 */}
-        <main className="min-w-0 flex-1 py-8 lg:py-10">
-          <div className="mx-auto max-w-3xl">{children}</div>
+        <main className="min-w-0 flex-1 py-8 lg:py-12">
+          <div className="mx-auto max-w-[46rem]">{children}</div>
         </main>
 
         {/* 右 PageToc（記事ページのみ） */}
         {hasToc && (
-          <aside className="no-print sticky top-14 hidden h-[calc(100vh-3.5rem)] w-56 shrink-0 overflow-y-auto py-10 xl:block">
+          <aside className="no-print sticky top-14 hidden h-[calc(100vh-3.5rem)] w-56 shrink-0 overflow-y-auto py-12 xl:block">
             <PageToc headings={headings ?? []} />
           </aside>
         )}

@@ -46,7 +46,7 @@ export default async function RoleIndexPage({
   return (
     <AppShell role={role}>
       <div className="mb-10">
-        <p className="mb-2 text-sm font-semibold text-accent">
+        <p className="mb-2 text-sm font-medium text-accent-ink">
           {roleMeta.label}
         </p>
         <h1 className="text-3xl font-bold tracking-tight text-fg">
@@ -59,10 +59,7 @@ export default async function RoleIndexPage({
         {nav.map((section) => (
           <section key={section.section}>
             <h2 className="mb-4 flex items-center gap-2.5 text-lg font-semibold text-fg">
-              <span
-                className="inline-block h-5 w-1 rounded"
-                style={{ background: "var(--accent)" }}
-              />
+              <span className="inline-block h-5 w-1 rounded bg-accent" />
               {section.label}
             </h2>
             <div className="grid gap-3 sm:grid-cols-2">
@@ -70,14 +67,23 @@ export default async function RoleIndexPage({
                 <Link
                   key={item.slug}
                   href={item.href}
-                  className="group rounded-lg border border-line bg-surface p-4 transition-colors hover:border-accent hover:bg-accent-soft"
+                  className="group flex items-center justify-between gap-2 rounded-lg border border-line bg-surface px-4 py-3.5 transition-colors hover:border-line-strong hover:bg-surface-2"
                 >
-                  <span className="block font-medium text-fg group-hover:text-accent">
-                    {item.title}
-                  </span>
-                  <span className="mt-1 inline-flex items-center gap-1 text-sm text-muted group-hover:text-accent">
-                    開く →
-                  </span>
+                  <span className="font-medium text-fg">{item.title}</span>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="shrink-0 text-muted-2 transition-transform group-hover:translate-x-0.5 group-hover:text-accent-ink"
+                    aria-hidden
+                  >
+                    <path d="M5 12h14M13 6l6 6-6 6" />
+                  </svg>
                 </Link>
               ))}
             </div>

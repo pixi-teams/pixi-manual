@@ -39,7 +39,7 @@ export const SidebarNav = ({
         <p className="mb-2 px-1 text-xs font-semibold uppercase tracking-wide text-muted-2">
           マニュアル
         </p>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-0.5">
           {roles.map((r) => {
             const active = r.key === role;
             return (
@@ -48,21 +48,14 @@ export const SidebarNav = ({
                 href={`/docs/${r.key}`}
                 data-role={r.key}
                 onClick={onNavigate}
-                className="flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition-colors"
-                style={
+                aria-current={active ? "page" : undefined}
+                className={`flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition-colors ${
                   active
-                    ? {
-                        background: "var(--accent-soft)",
-                        color: "var(--accent)",
-                        fontWeight: 600,
-                      }
-                    : undefined
-                }
+                    ? "bg-surface-2 font-semibold text-fg"
+                    : "text-muted hover:bg-surface-2 hover:text-fg"
+                }`}
               >
-                <span
-                  className="size-2 shrink-0 rounded-full"
-                  style={{ background: "var(--accent)" }}
-                />
+                <span className="size-2 shrink-0 rounded-full bg-accent" />
                 {r.label}
               </Link>
             );
@@ -85,12 +78,12 @@ export const SidebarNav = ({
                     <Link
                       href={item.href}
                       onClick={onNavigate}
-                      className="-ml-px block border-l-2 py-1.5 pl-3 text-sm transition-colors hover:text-accent"
-                      style={{
-                        borderColor: active ? "var(--accent)" : "transparent",
-                        color: active ? "var(--accent)" : "var(--muted)",
-                        fontWeight: active ? 600 : 400,
-                      }}
+                      aria-current={active ? "page" : undefined}
+                      className={`-ml-px block border-l-2 py-1.5 pl-3 text-sm transition-colors ${
+                        active
+                          ? "border-accent font-medium text-accent-ink"
+                          : "border-transparent text-muted hover:border-line-strong hover:text-fg"
+                      }`}
                     >
                       {item.title}
                     </Link>

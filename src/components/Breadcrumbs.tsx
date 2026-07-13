@@ -25,16 +25,31 @@ export const Breadcrumbs = ({ items }: BreadcrumbsProps) => {
               {item.href && !isLast ? (
                 <Link
                   href={item.href}
-                  className="transition-colors hover:text-accent"
+                  className="transition-colors hover:text-accent-ink"
                 >
                   {item.label}
                 </Link>
               ) : (
-                <span className={isLast ? "text-fg" : undefined}>
+                <span className={isLast ? "font-medium text-fg" : undefined}>
                   {item.label}
                 </span>
               )}
-              {!isLast && <span className="text-muted-2">/</span>}
+              {!isLast && (
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-muted-2"
+                  aria-hidden
+                >
+                  <path d="m9 18 6-6-6-6" />
+                </svg>
+              )}
             </li>
           );
         })}

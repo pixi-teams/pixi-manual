@@ -13,34 +13,37 @@ const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-background text-fg">
-      <header className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
-        <div className="flex items-center gap-2.5">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={`${BASE_PATH}/logo_v3.png`}
-            alt="pixi"
-            width={26}
-            height={26}
-            className="rounded"
-          />
-          <span className="font-semibold tracking-tight">pixi マニュアル</span>
+      <header className="border-b border-line">
+        <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
+          <div className="flex items-center gap-2.5">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`${BASE_PATH}/logo_v3.png`}
+              alt=""
+              width={61}
+              height={24}
+              className="h-6 w-auto"
+            />
+            <span className="font-semibold tracking-tight">マニュアル</span>
+          </div>
+          <ThemeToggle />
         </div>
-        <ThemeToggle />
       </header>
 
-      <main className="mx-auto max-w-5xl px-6 pb-24 pt-12 sm:pt-20">
+      <main className="mx-auto max-w-5xl px-6 pb-24 pt-16 sm:pt-24">
         {/* Hero */}
-        <div className="mb-14 max-w-2xl">
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-            pixi マニュアル
+        <div className="mb-12 max-w-2xl">
+          <p className="mb-3 text-sm font-medium text-muted">pixi ドキュメント</p>
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            pixi 操作マニュアル
           </h1>
-          <p className="mt-4 text-lg text-muted">
+          <p className="mt-4 text-lg leading-relaxed text-muted">
             ご利用の立場にあわせて、操作マニュアルをご覧いただけます。
           </p>
         </div>
 
         {/* Role Cards */}
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-3">
           {roles.map((role) => {
             const sections = (roleSections[role.key] ?? []).map(
               (s) => sectionLabels[s] ?? s,
@@ -50,21 +53,13 @@ export default function HomePage() {
                 key={role.key}
                 href={`/docs/${role.key}`}
                 data-role={role.key}
-                className="group flex flex-col rounded-xl border border-line bg-surface p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
-                style={{ borderTopWidth: 3, borderTopColor: "var(--accent)" }}
+                className="group relative flex flex-col overflow-hidden rounded-lg border border-line bg-surface p-6 transition-colors hover:border-line-strong hover:bg-surface-2"
               >
-                <span
-                  className="mb-4 inline-grid size-10 place-items-center rounded-lg text-lg font-bold"
-                  style={{
-                    background: "var(--accent-soft)",
-                    color: "var(--accent)",
-                  }}
-                >
+                <span className="absolute inset-x-0 top-0 h-0.5 bg-accent" />
+                <span className="mb-4 inline-grid size-10 place-items-center rounded-lg bg-accent-soft text-lg font-bold text-accent-ink">
                   {role.label.charAt(0)}
                 </span>
-                <h2 className="text-lg font-semibold group-hover:text-accent">
-                  {role.label}
-                </h2>
+                <h2 className="text-lg font-semibold">{role.label}</h2>
                 <p className="mt-1 text-sm text-muted">{role.description}</p>
                 <div className="mt-4 flex flex-wrap gap-1.5">
                   {sections.map((s) => (
@@ -76,8 +71,22 @@ export default function HomePage() {
                     </span>
                   ))}
                 </div>
-                <span className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-accent">
-                  マニュアルを開く →
+                <span className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-accent-ink">
+                  マニュアルを開く
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="transition-transform group-hover:translate-x-0.5"
+                    aria-hidden
+                  >
+                    <path d="M5 12h14M13 6l6 6-6 6" />
+                  </svg>
                 </span>
               </Link>
             );

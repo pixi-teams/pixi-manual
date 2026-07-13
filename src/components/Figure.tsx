@@ -28,8 +28,15 @@ export const Figure = ({ src, alt, caption }: FigureProps) => {
           className="mx-auto block h-auto max-w-full rounded-md border border-line-strong bg-surface-2 shadow-sm"
         />
       ) : (
-        <div className="grid min-h-40 place-items-center rounded-md border border-dashed border-line-strong bg-surface-2 text-sm text-muted">
-          <span>📷 スクリーンショット準備中{alt ? `：${alt}` : ""}</span>
+        <div
+          role="img"
+          aria-label={`スクリーンショット準備中${alt ? `：${alt}` : ""}`}
+          className="grid min-h-40 place-items-center rounded-md border border-dashed border-line-strong bg-surface-2 px-4 text-center text-sm text-muted"
+        >
+          <span>
+            <span aria-hidden>🖼️</span> スクリーンショット準備中
+            {alt ? `：${alt}` : ""}
+          </span>
         </div>
       )}
       {caption && (
