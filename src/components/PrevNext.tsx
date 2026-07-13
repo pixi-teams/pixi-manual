@@ -19,10 +19,10 @@ export const PrevNext = ({ prev, next }: PrevNextProps) => {
       {prev ? (
         <Link
           href={`/docs/${prev.role}/${prev.section}/${prev.slug}`}
-          className="group rounded-md border border-line bg-surface px-4 py-3 transition-colors hover:border-accent hover:bg-accent-soft"
+          className="group rounded-md border border-line bg-surface px-4 py-3 transition-colors hover:border-line-strong hover:bg-surface-2"
         >
           <span className="block text-xs text-muted">← 前のページ</span>
-          <span className="mt-0.5 block font-medium text-fg group-hover:text-accent">
+          <span className="mt-0.5 block font-medium text-fg group-hover:text-accent-ink">
             {prev.title}
           </span>
         </Link>
@@ -32,10 +32,10 @@ export const PrevNext = ({ prev, next }: PrevNextProps) => {
       {next ? (
         <Link
           href={`/docs/${next.role}/${next.section}/${next.slug}`}
-          className="group rounded-md border border-line bg-surface px-4 py-3 text-right transition-colors hover:border-accent hover:bg-accent-soft"
+          className="group rounded-md border border-line bg-surface px-4 py-3 text-right transition-colors hover:border-line-strong hover:bg-surface-2"
         >
           <span className="block text-xs text-muted">次のページ →</span>
-          <span className="mt-0.5 block font-medium text-fg group-hover:text-accent">
+          <span className="mt-0.5 block font-medium text-fg group-hover:text-accent-ink">
             {next.title}
           </span>
         </Link>

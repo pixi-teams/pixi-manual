@@ -142,11 +142,14 @@ export const SearchDialog = () => {
 
       {open && (
         <div
-          className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 px-4 pt-[12vh]"
+          className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 px-4 pt-[12vh] backdrop-blur-sm"
           onClick={() => setOpen(false)}
         >
           <div
-            className="w-full max-w-xl overflow-hidden rounded-xl border border-line bg-surface shadow-2xl"
+            role="dialog"
+            aria-modal="true"
+            aria-label="マニュアル内を検索"
+            className="w-full max-w-xl overflow-hidden rounded-lg border border-line bg-surface shadow-[var(--shadow)]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center gap-2 border-b border-line px-4">
@@ -188,14 +191,14 @@ export const SearchDialog = () => {
                   <li key={i}>
                     <a
                       href={r.url}
-                      className="block rounded-md px-3 py-2.5 transition-colors hover:bg-accent-soft"
+                      className="block rounded-md px-3 py-2.5 transition-colors hover:bg-surface-2"
                       onClick={() => setOpen(false)}
                     >
                       <span className="block text-sm font-medium text-fg">
                         {r.title}
                       </span>
                       <span
-                        className="mt-0.5 block text-xs text-muted [&_mark]:bg-accent-soft [&_mark]:text-accent"
+                        className="mt-0.5 block text-xs text-muted [&_mark]:bg-accent-soft [&_mark]:text-accent-ink"
                         dangerouslySetInnerHTML={{ __html: r.excerpt }}
                       />
                     </a>

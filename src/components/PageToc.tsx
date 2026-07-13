@@ -40,19 +40,22 @@ export const PageToc = ({ headings }: PageTocProps) => {
 
   return (
     <nav aria-label="このページの目次" className="text-sm">
-      <p className="mb-3 font-semibold text-fg">このページの内容</p>
-      <ul className="space-y-1.5 border-l border-line">
+      <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-2">
+        このページの内容
+      </p>
+      <ul className="space-y-1 border-l border-line">
         {headings.map((h) => {
           const isActive = activeId === h.id;
           return (
-            <li key={h.id} style={{ paddingLeft: h.depth === 3 ? "1rem" : 0 }}>
+            <li key={h.id} className={h.depth === 3 ? "pl-4" : undefined}>
               <a
                 href={`#${h.id}`}
-                className="-ml-px block border-l-2 py-0.5 pl-3 transition-colors"
-                style={{
-                  borderColor: isActive ? "var(--accent)" : "transparent",
-                  color: isActive ? "var(--accent)" : "var(--muted)",
-                }}
+                aria-current={isActive ? "location" : undefined}
+                className={`-ml-px block border-l-2 py-0.5 pl-3 transition-colors ${
+                  isActive
+                    ? "border-accent font-medium text-accent-ink"
+                    : "border-transparent text-muted hover:border-line-strong hover:text-fg"
+                }`}
               >
                 {h.text}
               </a>

@@ -1,17 +1,15 @@
 import type { Metadata } from "next";
-import { Inter, Noto_Sans_JP, Roboto_Mono } from "next/font/google";
+import { Inter, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 
+/**
+ * 欧文・数字は Inter。和文は OS 標準の高品質ゴシック
+ * （Hiragino / Yu Gothic / Noto）にフォールバックさせる。
+ * 和文 Web フォントは容量が大きく SSG に不向きなため読み込まない。
+ */
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
-  display: "swap",
-});
-
-const notoSansJP = Noto_Sans_JP({
-  variable: "--font-noto-sans-jp",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -21,12 +19,27 @@ const robotoMono = Roboto_Mono({
   display: "swap",
 });
 
-const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://pixi-teams.github.io";
 
 export const metadata: Metadata = {
-  title: "pixi マニュアル",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "pixi マニュアル",
+    template: "%s | pixi マニュアル",
+  },
   description: "pixi 操作マニュアル — Web予約・キャスト管理・システム管理",
-  icons: { icon: `${BASE_PATH}/logo_v3.png` },
+  openGraph: {
+    title: "pixi マニュアル",
+    description: "pixi 操作マニュアル — Web予約・キャスト管理・システム管理",
+    siteName: "pixi マニュアル",
+    locale: "ja_JP",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "pixi マニュアル",
+    description: "pixi 操作マニュアル — Web予約・キャスト管理・システム管理",
+  },
 };
 
 /**
@@ -46,7 +59,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body
-        className={`${inter.variable} ${notoSansJP.variable} ${robotoMono.variable} antialiased`}
+        className={`${inter.variable} ${robotoMono.variable} antialiased`}
       >
         {children}
       </body>

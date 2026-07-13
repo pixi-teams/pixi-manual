@@ -11,13 +11,15 @@
 
 /* =========================================================
    pixi マニュアル — Design System
-   地(chrome)はニュートラルグレーで統一し、
-   アクセントだけロール別に data-role で切り替える。
+   方向: ミニマル & 高コントラスト（toB）。
+   地(chrome)はニュートラルグレーで統一し、アクセントだけ
+   data-role で切り替える。テキスト用は --accent-ink（AA準拠）、
+   装飾用は --accent（ブランド色そのまま）を使い分ける。
    ========================================================= */
 
 @theme inline {
-  --font-sans: var(--font-inter), var(--font-noto-sans-jp), "Hiragino Sans",
-    "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+  --font-sans: var(--font-inter), "Hiragino Kaku Gothic ProN", "Hiragino Sans",
+    "Yu Gothic", "YuGothic", "Noto Sans JP", "Meiryo", sans-serif;
   --font-mono: var(--font-roboto-mono), ui-monospace, SFMono-Regular, Menlo,
     monospace;
 
@@ -32,75 +34,108 @@
   --color-line: var(--line);
   --color-line-strong: var(--line-strong);
   --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
   --color-accent-hover: var(--accent-hover);
   --color-accent-soft: var(--accent-soft);
   --color-accent-fg: var(--accent-fg);
 
-  --radius-card: 12px;
-  --radius-md: 10px;
-  --radius-sm: 8px;
+  /* 角丸は Tailwind の rounded-{sm,md,lg,xl} に対応（ミニマル寄りに小さめ） */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 12px;
 }
 
 /* ---------- ライトテーマ（既定） ---------- */
 :root {
   --background: #ffffff;
   --surface: #ffffff;
-  --surface-2: #f8fafc;
-  --surface-3: #f1f5f9;
+  --surface-2: #f6f7f9;
+  --surface-3: #eceff4;
 
-  --foreground: #1e293b;
-  --muted: #64748b;
-  --muted-2: #94a3b8;
+  --foreground: #0f172a;
+  --muted: #525c6e;
+  --muted-2: #8a94a6;
 
-  --line: #e2e8f0;
-  --line-strong: #cbd5e1;
+  --line: #e6e9ef;
+  --line-strong: #cfd5df;
 
-  --code-bg: #f1f5f9;
-  --code-fg: #be185d;
+  --code-bg: #f1f3f7;
+  --code-fg: #b21e63;
   --pre-bg: #0f172a;
   --pre-fg: #e2e8f0;
 
   /* アクセント既定値（ロール未指定時はインディゴ）。
-     data-role で --accent / --accent-fg を上書きする。 */
+     data-role で --accent を上書きする。 */
   --accent: #3f51b5;
   --accent-fg: #ffffff;
-  --accent-hover: color-mix(in srgb, var(--accent) 84%, #000);
-  --accent-soft: color-mix(in srgb, var(--accent) 10%, transparent);
-  --accent-border: color-mix(in srgb, var(--accent) 32%, transparent);
+  /* テキスト/操作系（AA準拠）: ブランド色を暗く寄せる */
+  --accent-ink: color-mix(in srgb, var(--accent) 76%, #000);
+  --accent-hover: color-mix(in srgb, var(--accent-ink) 88%, #000);
+  --accent-soft: color-mix(in srgb, var(--accent) 8%, transparent);
+  --accent-border: color-mix(in srgb, var(--accent) 30%, transparent);
 
-  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
-  --shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow: 0 8px 28px rgba(15, 23, 42, 0.1);
+
+  /* Callout（両テーマで視認可能な淡色） */
+  --callout-note-fg: #1e4e8c;
+  --callout-note-bg: #eff5fc;
+  --callout-note-border: #3b82f6;
+  --callout-tip-fg: #166534;
+  --callout-tip-bg: #edf9f0;
+  --callout-tip-border: #22c55e;
+  --callout-warning-fg: #92500e;
+  --callout-warning-bg: #fdf6ea;
+  --callout-warning-border: #f59e0b;
+  --callout-step-fg: #5b3aa8;
+  --callout-step-bg: #f3f1fc;
+  --callout-step-border: #8b5cf6;
 }
 
 /* ---------- ダークテーマ ---------- */
 .dark {
   --background: #0b1120;
   --surface: #0f172a;
-  --surface-2: #131f36;
-  --surface-3: #1c2942;
+  --surface-2: #111c33;
+  --surface-3: #1a2740;
 
-  --foreground: #e6ebf4;
-  --muted: #94a3b8;
-  --muted-2: #64748b;
+  --foreground: #e8edf5;
+  --muted: #9aa6bb;
+  --muted-2: #5b6577;
 
-  --line: #233149;
-  --line-strong: #33456a;
+  --line: #22304a;
+  --line-strong: #33455f;
 
-  --code-bg: #1c2942;
+  --code-bg: #17233c;
   --code-fg: #f9a8d4;
   --pre-bg: #0a1122;
   --pre-fg: #dbe3f0;
 
   --accent-fg: #ffffff;
-  --accent-hover: color-mix(in srgb, var(--accent) 82%, #fff);
-  --accent-soft: color-mix(in srgb, var(--accent) 20%, transparent);
+  --accent-ink: color-mix(in srgb, var(--accent) 86%, #fff);
+  --accent-hover: color-mix(in srgb, var(--accent-ink) 88%, #fff);
+  --accent-soft: color-mix(in srgb, var(--accent) 22%, transparent);
   --accent-border: color-mix(in srgb, var(--accent) 42%, transparent);
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+
+  --callout-note-fg: #a7c8f5;
+  --callout-note-bg: rgba(59, 130, 246, 0.13);
+  --callout-note-border: #3b82f6;
+  --callout-tip-fg: #8fe3ab;
+  --callout-tip-bg: rgba(34, 197, 94, 0.13);
+  --callout-tip-border: #22c55e;
+  --callout-warning-fg: #f5c67e;
+  --callout-warning-bg: rgba(245, 158, 11, 0.14);
+  --callout-warning-border: #f59e0b;
+  --callout-step-fg: #c7b4f2;
+  --callout-step-bg: rgba(139, 92, 246, 0.16);
+  --callout-step-border: #8b5cf6;
 }
 
-/* ---------- ロール別アクセント ---------- */
+/* ---------- ロール別アクセント（ブランド色を維持） ---------- */
 /* お客様 = 予約サイト(reserve) ティール */
 [data-role="customer"] {
   --accent: #019b98;
@@ -113,9 +148,12 @@
 [data-role="admin"] {
   --accent: #3f51b5;
 }
-/* ダークではティールを少し明るく */
+/* ダークでは装飾用のブランド色を少し明るく（--accent-ink は各テーマ式で追従） */
 .dark [data-role="customer"] {
   --accent: #22c3bf;
+}
+.dark [data-role="cast"] {
+  --accent: #ff5f95;
 }
 .dark [data-role="admin"] {
   --accent: #7986cb;
@@ -132,11 +170,20 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  font-size: 16px;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 ::selection {
   background: var(--accent-soft);
+}
+
+/* フォーカス可視化（全インタラクティブ要素） */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 3px;
 }
 
 /* スクロール時のアンカー余白（固定ヘッダー分） */
@@ -148,24 +195,29 @@ html {
    Prose（マニュアル本文） — すべて変数参照
    ========================================================= */
 .prose-manual {
-  line-height: 1.9;
-  font-size: 0.95rem;
+  line-height: 1.75;
+  font-size: 1rem;
   color: var(--foreground);
   max-width: none;
 }
 
 .prose-manual h1 {
-  font-size: 1.9rem;
+  font-size: 2rem;
+  line-height: 1.25;
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   color: var(--foreground);
   margin-bottom: 1.5rem;
   scroll-margin-top: 5rem;
 }
 
 .prose-manual h2 {
-  font-size: 1.35rem;
-  font-weight: 700;
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  line-height: 1.3;
+  font-weight: 650;
+  letter-spacing: -0.01em;
   color: var(--foreground);
   margin-top: 2.75rem;
   margin-bottom: 1rem;
@@ -175,22 +227,24 @@ html {
 }
 
 .prose-manual h3 {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
+  line-height: 1.4;
   font-weight: 600;
+  letter-spacing: -0.005em;
   color: var(--foreground);
-  margin-top: 1.9rem;
+  margin-top: 2rem;
   margin-bottom: 0.7rem;
   scroll-margin-top: 5rem;
 }
 
-/* H2 見出しの左にアクセントのアクセントバー */
+/* H2 見出しの左に控えめなアクセントバー */
 .prose-manual h2::before {
   content: "";
   display: inline-block;
-  width: 0.3rem;
+  flex: none;
+  width: 3px;
   height: 1.05em;
   margin-right: 0.6rem;
-  vertical-align: -0.12em;
   border-radius: 2px;
   background: var(--accent);
 }
@@ -200,13 +254,16 @@ html {
 }
 
 .prose-manual a {
-  color: var(--accent);
+  color: var(--accent-ink);
   text-decoration: underline;
   text-underline-offset: 2px;
   text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in srgb, var(--accent-ink) 40%, transparent);
+  transition: text-decoration-color 0.15s ease;
 }
 .prose-manual a:hover {
   color: var(--accent-hover);
+  text-decoration-color: currentColor;
 }
 
 .prose-manual ul {
@@ -223,11 +280,11 @@ html {
   margin-bottom: 0.4rem;
 }
 .prose-manual li::marker {
-  color: var(--accent);
+  color: var(--muted-2);
 }
 
 .prose-manual blockquote {
-  background: var(--accent-soft);
+  background: var(--surface-2);
   border-left: 3px solid var(--accent);
   padding: 0.85rem 1.15rem;
   margin: 1.5rem 0;
@@ -255,13 +312,16 @@ html {
   overflow-x: auto;
   margin: 1.25rem 0;
   font-size: 0.85rem;
+  line-height: 1.7;
 }
 .prose-manual pre code {
   background: none;
   padding: 0;
   color: inherit;
+  font-size: inherit;
 }
 
+/* テーブル: 罫線基調で囲み、横スクロール可能に */
 .prose-manual table {
   width: 100%;
   border-collapse: collapse;
@@ -269,16 +329,29 @@ html {
   font-size: 0.9rem;
   display: block;
   overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
 }
 .prose-manual th,
 .prose-manual td {
-  border: 1px solid var(--line);
-  padding: 0.55rem 0.8rem;
+  border-bottom: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  padding: 0.6rem 0.85rem;
   text-align: left;
+  vertical-align: top;
+}
+.prose-manual tr:last-child td {
+  border-bottom: none;
+}
+.prose-manual th:last-child,
+.prose-manual td:last-child {
+  border-right: none;
 }
 .prose-manual th {
   background: var(--surface-2);
   font-weight: 600;
+  color: var(--foreground);
+  white-space: nowrap;
 }
 
 .prose-manual hr {
@@ -304,6 +377,55 @@ html {
 }
 
 /* =========================================================
+   Callout（MDX）— per-type トークンで両テーマ対応
+   ========================================================= */
+.callout {
+  margin: 1.5rem 0;
+  padding: 0.85rem 1rem;
+  border-left: 4px solid var(--callout-border, var(--line-strong));
+  border-radius: var(--radius-sm);
+  background: var(--callout-bg, var(--surface-2));
+  color: var(--foreground);
+}
+.callout-note {
+  --callout-fg: var(--callout-note-fg);
+  --callout-bg: var(--callout-note-bg);
+  --callout-border: var(--callout-note-border);
+}
+.callout-tip {
+  --callout-fg: var(--callout-tip-fg);
+  --callout-bg: var(--callout-tip-bg);
+  --callout-border: var(--callout-tip-border);
+}
+.callout-warning {
+  --callout-fg: var(--callout-warning-fg);
+  --callout-bg: var(--callout-warning-bg);
+  --callout-border: var(--callout-warning-border);
+}
+.callout-step {
+  --callout-fg: var(--callout-step-fg);
+  --callout-bg: var(--callout-step-bg);
+  --callout-border: var(--callout-step-border);
+}
+.callout-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--callout-fg, var(--foreground));
+}
+.callout-body {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--foreground);
+}
+.callout-body > :last-child {
+  margin-bottom: 0;
+}
+
+/* =========================================================
    Book View（PDF/通し読み用）
    ========================================================= */
 .book-view article + article {
@@ -322,7 +444,12 @@ html {
     --line: #ddd;
     --line-strong: #bbb;
     --accent: #333;
+    --accent-ink: #222;
     --accent-soft: #f5f5f5;
+    --callout-note-bg: #f4f8fd;
+    --callout-tip-bg: #f2fbf5;
+    --callout-warning-bg: #fdf8ee;
+    --callout-step-bg: #f6f3fd;
   }
 
   body {
@@ -340,6 +467,11 @@ html {
   .prose-manual h2,
   .prose-manual h3 {
     page-break-after: avoid;
+  }
+  .callout,
+  .prose-manual img,
+  .prose-manual table {
+    page-break-inside: avoid;
   }
   .book-view article {
     page-break-inside: avoid;
