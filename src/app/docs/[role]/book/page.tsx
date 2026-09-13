@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getRoleDocs, getRoleMeta, roles } from "@/lib/mdx";
+import { getDoc, getRoleMeta, roles, stripTitle } from "@/lib/mdx";
+import { getRoleOutline } from "@/lib/outline";
 import { MdxContent } from "@/components/MdxContent";
+import { BookCover } from "@/components/book/BookCover";
+import { BookRevisions } from "@/components/book/BookRevisions";
+import { BookToc } from "@/components/book/BookToc";
+import { manualMeta } from "@content/manual-meta";
 
 interface PageParams {
   role: string;
@@ -27,7 +32,7 @@ export const generateMetadata = async ({
   const roleMeta = getRoleMeta(role);
   if (!roleMeta) return {};
   return {
-    title: `${roleMeta.label}マニュアル（通し読み） | pixi`,
+    title: `${roleMeta.label}${manualMeta.title}（通し読み） | ${manualMeta.productName}`,
   };
 };
 
@@ -40,24 +45,53 @@ export default async function BookPage({
   const roleMeta = getRoleMeta(role);
   if (!roleMeta) notFound();
 
-  const docs = getRoleDocs(role);
+  const outline = getRoleOutline(role);
 
   return (
-    <div data-role={role} className="bg-background text-fg">
-      <div className="book-view mx-auto max-w-3xl px-6 py-10">
-        <div className="mb-12 text-center">
-          <h1 className="inline-block text-3xl font-bold tracking-tight text-fg">
-            pixi マニュアル — {roleMeta.label}
-          </h1>
-          <p className="mt-3 text-sm text-muted">{roleMeta.description}</p>
-        </div>
+    <div data-role={role} className="book bg-background text-fg">
+      <BookCover roleMeta={roleMeta} />
+      <BookRevisions />
+      <BookToc outline={outline} />
 
-        {docs.map((doc) => (
-          <article key={`${doc.section}-${doc.slug}`} id={doc.slug} className="mb-16 scroll-mt-8">
-            <MdxContent source={doc.content} />
-          </article>
-        ))}
-      </div>
+      {outline.map((chapter) => (
+        <section key={chapter.anchorId} className="book-chapter">
+          {/* 章扉 */}
+          <div className="book-chapter-opener">
+            <h1 id={chapter.anchorId} className="book-chapter-title">
+              <span className="book-chapter-num">第{chapter.number}章</span>
+              <span className="book-chapter-name">{chapter.title}</span>
+            </h1>
+            <ol className="book-chapter-contents">
+              {chapter.sections.map((section) => (
+                <li key={section.anchorId}>
+                  <span className="book-chapter-contents-num">
+                    {section.number}
+                  </span>
+                  <span>{section.title}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          {chapter.sections.map((section) => {
+            const doc = getDoc(role, section.section, section.slug);
+            if (!doc) return null;
+            return (
+              <article
+                key={section.anchorId}
+                id={section.anchorId}
+                className="book-article"
+              >
+                <h2 className="book-article-title">
+                  <span className="book-article-num">{section.number}</span>
+                  <span>{section.title}</span>
+                </h2>
+                <MdxContent source={stripTitle(doc.content)} />
+              </article>
+            );
+          })}
+        </section>
+      ))}
     </div>
   );
 }

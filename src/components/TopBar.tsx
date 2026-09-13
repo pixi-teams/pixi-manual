@@ -2,15 +2,18 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import type { NavSection, RoleMeta } from "@/lib/mdx";
+import type { RoleMeta } from "@/lib/mdx";
+import type { OutlineChapter } from "@/lib/outline";
 import { SidebarNav } from "./SidebarNav";
 import { SearchDialog } from "./SearchDialog";
 import { ThemeToggle } from "./ThemeToggle";
+import { Portal } from "./Portal";
 
 interface TopBarProps {
   role: string;
   roles: RoleMeta[];
-  nav: NavSection[];
+  /** 章番号つきの章立て */
+  outline: OutlineChapter[];
   /** PDF / 印刷用（book ビュー）への遷移先 */
   pdfHref: string;
 }
@@ -21,7 +24,7 @@ const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
  * 上部固定バー。ロゴ・検索・テーマ切替・PDF リンク、
  * および小画面でのサイドバードロワーを管理する。
  */
-export const TopBar = ({ role, roles, nav, pdfHref }: TopBarProps) => {
+export const TopBar = ({ role, roles, outline, pdfHref }: TopBarProps) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   // ドロワー表示中は Esc で閉じ、背面スクロールを止める
@@ -64,18 +67,19 @@ export const TopBar = ({ role, roles, nav, pdfHref }: TopBarProps) => {
         </button>
 
         {/* ロゴ（比率維持） */}
-        <Link href="/" className="flex items-center gap-2.5" aria-label="pixi マニュアル トップ">
+        <Link
+          href="/"
+          className="flex items-center"
+          aria-label="pixi マニュアル トップ"
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={`${BASE_PATH}/logo_v3.png`}
-            alt=""
+            alt="pixi"
             width={61}
             height={24}
             className="h-6 w-auto"
           />
-          <span className="hidden font-semibold tracking-tight text-fg sm:inline">
-            マニュアル
-          </span>
         </Link>
 
         <div className="flex-1" />
@@ -104,52 +108,59 @@ export const TopBar = ({ role, roles, nav, pdfHref }: TopBarProps) => {
         </Link>
       </div>
 
-      {/* モバイルドロワー */}
+      {/* モバイルドロワー（header は backdrop-blur を持つため body 直下に出す） */}
       {drawerOpen && (
-        <div
-          className="fixed inset-0 z-50 lg:hidden"
-          onClick={() => setDrawerOpen(false)}
-        >
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+        <Portal>
           <div
-            role="dialog"
-            aria-modal="true"
-            aria-label="ナビゲーション"
-            className="absolute left-0 top-0 h-full w-72 max-w-[80%] overflow-y-auto border-r border-line bg-surface p-5"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-[60] lg:hidden"
+            onClick={() => setDrawerOpen(false)}
           >
-            <div className="mb-4 flex items-center justify-between">
-              <span className="font-semibold tracking-tight text-fg">
-                pixi マニュアル
-              </span>
-              <button
-                type="button"
-                onClick={() => setDrawerOpen(false)}
-                aria-label="メニューを閉じる"
-                className="grid size-8 place-items-center rounded-md text-muted hover:bg-surface-2 hover:text-fg"
-              >
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  aria-hidden
+            <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-label="ナビゲーション"
+              className="absolute left-0 top-0 h-full w-72 max-w-[80%] overflow-y-auto border-r border-line bg-surface p-5"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="mb-4 flex items-center justify-between">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`${BASE_PATH}/logo_v3.png`}
+                  alt="pixi"
+                  width={61}
+                  height={24}
+                  className="h-6 w-auto"
+                />
+                <button
+                  type="button"
+                  onClick={() => setDrawerOpen(false)}
+                  aria-label="メニューを閉じる"
+                  className="grid size-8 place-items-center rounded-md text-muted hover:bg-surface-2 hover:text-fg"
                 >
-                  <path d="M18 6 6 18M6 6l12 12" />
-                </svg>
-              </button>
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    aria-hidden
+                  >
+                    <path d="M18 6 6 18M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <SidebarNav
+                role={role}
+                roles={roles}
+                outline={outline}
+                onNavigate={() => setDrawerOpen(false)}
+              />
             </div>
-            <SidebarNav
-              role={role}
-              roles={roles}
-              nav={nav}
-              onNavigate={() => setDrawerOpen(false)}
-            />
           </div>
-        </div>
+        </Portal>
       )}
     </header>
   );

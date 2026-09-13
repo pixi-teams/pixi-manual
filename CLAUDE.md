@@ -39,7 +39,11 @@ Pagefind によるクライアント検索・ダークモード・パンくず�
 - 配置先: `content/docs/{セクションディレクトリ}/{連番}-{スラッグ}.md`
 - ファイル名の連番が表示順を決定する
 - 見出しルール: H1 = 記事タイトル, H2 = 機能/セクション（右 PageToc に載る）, H3 = 手順
+  - ⚠ H1 は `stripTitle()` で本文から除去され、章番号つきタイトルとして描画側が出す。
+    Markdown には必ず H1 を 1 つ書くこと（タイトルの抽出元）
 - テンプレート構成: できること → 事前準備 → 手順 → 確認ポイント → よくあるミス
+  - 例外: 前付け `content/docs/00-{role}-intro/`（本書の目的 / 動作環境 / 見かた / 用語説明 / 注意）は
+    このテンプレの適用外。各ロールで内容が異なるため 3 ディレクトリに分けている
 - スクリーンショット: 基本、全手順に添える。保管先は
   `public/manuals/{role}/{section}/{slug}/{連番}-説明.png`。
   MDX 内から `<Figure src="/manuals/..." alt="..." caption="..." />` で表示（src 省略時は準備中枠）。
@@ -61,24 +65,46 @@ Pagefind によるクライアント検索・ダークモード・パンくず�
 
 - `src/lib/mdx.ts` — Markdown 読込、ロール定義（`roles`/`roleSections`/`sectionLabels`）、
   記事取得（`getDoc`/`getRoleDocs`/`getAdjacentDocs`）、ナビ構築（`getRoleNav`）、
-  見出し抽出（`extractHeadings`）、静的パラメータ（`getAllDocParams`）
+  見出し抽出（`extractHeadings`）、H1 除去（`stripTitle`）、静的パラメータ（`getAllDocParams`）
+- `src/lib/outline.ts` — **章番号（1 / 2.1）の単一情報源**。`getRoleOutline` / `getDocNumber` /
+  `getChapterNumber`。章 = セクション、節 = 記事。番号はどこにも直書きしない
+- `content/manual-meta.ts` — 版数・発行日・発行元・改訂履歴。表紙と PDF フッターの正本
 - `src/components/AppShell.tsx` — TopBar + 左サイドバー + 本文 + 右 PageToc の 3 カラム枠
 - `src/components/` — TopBar / SidebarNav / PageToc / Breadcrumbs / PrevNext / SearchDialog /
   ThemeToggle / Callout / Figure / MdxContent
+- `src/components/book/` — PDF 用の表紙 / 改訂履歴 / 目次（BookCover / BookRevisions / BookToc）
 - ルート（すべて `generateStaticParams` で静的化）:
-  - `src/app/docs/[role]/page.tsx` — ロール別目次
+  - `src/app/docs/[role]/page.tsx` — ロール別目次（章番号つき）
   - `src/app/docs/[role]/[section]/[slug]/page.tsx` — 個別記事（AppShell 使用）
-  - `src/app/docs/[role]/book/page.tsx` — 1冊ビュー（PDF 生成対象・クロームなし）
+  - `src/app/docs/[role]/book/page.tsx` — 1冊ビュー（PDF 生成対象・表紙 + 改訂履歴 + 目次 + 章扉 + 節）
 - 検索: `pnpm build` の後段で `pagefind --site out` がインデックス生成。
   クライアントは `${NEXT_PUBLIC_BASE_PATH}/pagefind/pagefind.js` を動的 import（dev では未生成なので無効）
 
+### PDF の生成
+
+```bash
+pnpm build            # next build && pagefind
+pnpm serve            # out/ を :3000 で配信（別ターミナル）
+pnpm pdf              # public/manuals/pixi-manual-{role}-v{version}.pdf を出力
+```
+
+`scripts/generate-pdf.ts` は **2 パス**で動く（目次に実ページ番号を載せるため）。仕組みと前提は
+`DESIGN.md` の「6.7 目次のページ番号」を参照。book ページが描画されているかを検証するガードが
+入っているので、404 ページを印刷して気づかない事故は起きない。
+
+⚠ CI では `next.config.ts` が `basePath=/pixi-manual` を付けるが、`out/` にそのディレクトリは
+作られない。ワークフローは `out/` を `_site/pixi-manual/` に置いてから配信している。
+
 ### セクション/記事追加時の変更箇所
 
-1. `content/docs/` に新ディレクトリ + Markdown を追加（記事追加だけならこれだけ。ナビ・ルートは自動反映）
+1. `content/docs/` に新ディレクトリ + Markdown を追加（記事追加だけならこれだけ。ナビ・ルート・章番号は自動反映）
 2. 新セクションを増やす場合のみ `src/lib/mdx.ts` の `roleSections` と `sectionLabels` を更新
+   - `roleSections` の並び順がそのまま章番号になる
 
 ## Git 運用
 
 - ブランチ: `feature/docs-xxxx`
 - タグ: `manual-vX.Y.Z`（SemVer: MAJOR=UI変更, MINOR=章追加, PATCH=軽微修正）
 - タグ push で GitHub Actions が PDF を自動生成し Release に添付
+- **タグを打つ前に `content/manual-meta.ts` の `version` / `issuedAt` / `revisions` を更新する**
+  （表紙・改訂履歴・PDF ファイル名に反映される）

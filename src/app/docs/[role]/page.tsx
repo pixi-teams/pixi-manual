@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getRoleMeta, getRoleNav, roles } from "@/lib/mdx";
+import { getRoleMeta, roles } from "@/lib/mdx";
+import { getRoleOutline } from "@/lib/outline";
 import { AppShell } from "@/components/AppShell";
+import { formatIssuedAt, formatVersion, manualMeta } from "@content/manual-meta";
 
 interface PageParams {
   role: string;
@@ -41,51 +43,51 @@ export default async function RoleIndexPage({
   const roleMeta = getRoleMeta(role);
   if (!roleMeta) notFound();
 
-  const nav = getRoleNav(role);
+  const outline = getRoleOutline(role);
 
   return (
     <AppShell role={role}>
-      <div className="mb-10">
-        <p className="mb-2 text-sm font-medium text-muted">
-          {roleMeta.label}
-        </p>
+      <div className="mb-10 border-b border-line pb-8">
+        <p className="mb-2 text-sm font-medium text-muted">{roleMeta.label}</p>
         <h1 className="text-3xl font-bold tracking-tight text-fg">
-          {roleMeta.label}マニュアル
+          {roleMeta.label}
+          {manualMeta.title}
         </h1>
         <p className="mt-3 text-muted">{roleMeta.description}</p>
+        <p className="mt-4 text-xs text-muted-2">
+          {formatVersion(manualMeta.version)}・
+          {formatIssuedAt(manualMeta.issuedAt)}発行
+        </p>
       </div>
 
-      <div className="flex flex-col gap-10">
-        {nav.map((section) => (
-          <section key={section.section}>
-            <h2 className="mb-4 text-lg font-semibold text-fg">
-              {section.label}
-            </h2>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {section.items.map((item) => (
-                <Link
-                  key={item.slug}
-                  href={item.href}
-                  className="group flex items-center justify-between gap-2 rounded-lg border border-line bg-surface px-4 py-3.5 transition-colors hover:border-line-strong hover:bg-surface-2"
-                >
-                  <span className="font-medium text-fg">{item.title}</span>
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="shrink-0 text-muted-2 transition-transform group-hover:translate-x-0.5 group-hover:text-accent-ink"
-                    aria-hidden
+      <h2 className="mb-6 text-lg font-semibold text-fg">目次</h2>
+
+      <div className="flex flex-col gap-8">
+        {outline.map((chapter) => (
+          <section key={chapter.anchorId}>
+            <h3 className="flex gap-3 border-b border-line pb-2 text-base font-semibold text-fg">
+              <span className="w-8 shrink-0 tabular-nums text-muted">
+                {chapter.number}
+              </span>
+              <span>{chapter.title}</span>
+            </h3>
+            <ul className="mt-1">
+              {chapter.sections.map((section) => (
+                <li key={section.anchorId}>
+                  <Link
+                    href={section.href}
+                    className="group flex items-baseline gap-3 rounded-md px-1 py-2 transition-colors hover:bg-surface-2"
                   >
-                    <path d="M5 12h14M13 6l6 6-6 6" />
-                  </svg>
-                </Link>
+                    <span className="w-8 shrink-0 tabular-nums text-sm text-muted-2">
+                      {section.number}
+                    </span>
+                    <span className="text-fg group-hover:text-accent-ink">
+                      {section.title}
+                    </span>
+                  </Link>
+                </li>
               ))}
-            </div>
+            </ul>
           </section>
         ))}
       </div>

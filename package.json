@@ -6,6 +6,9 @@
     "dev": "next dev",
     "build": "next build && pagefind --site out",
     "start": "next start",
+    "serve": "npx -y serve@latest out -l 3000",
+    "pdf": "tsx scripts/generate-pdf.ts",
+    "shots:admin": "tsx scripts/capture-admin-screenshots.ts",
     "lint": "eslint"
   },
   "dependencies": {
@@ -21,12 +24,13 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@tailwindcss/typography": "^0.5.19",
-    "pagefind": "^1.3.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "pagefind": "^1.3.0",
+    "pdfjs-dist": "^6.2.108",
     "playwright": "^1.58.2",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",

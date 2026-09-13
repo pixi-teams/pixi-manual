@@ -76,6 +76,8 @@
   /* 影は原則不使用。区切りは罫線で。--shadow はオーバーレイ専用。 */
   --shadow-sm: none;
   --shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+  /* 横スクロール可能なことを示す端の影（機能的表示） */
+  --scroll-shade: rgba(55, 53, 47, 0.14);
 
   /* Callout はモノトーン地に統一（区別はラベル/アイコン）。警告のみ罫を濃く。 */
   --callout-note-fg: #37352f;
@@ -120,6 +122,7 @@
 
   --shadow-sm: none;
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --scroll-shade: rgba(0, 0, 0, 0.45);
 
   --callout-note-fg: #e6e6e4;
   --callout-note-bg: #262626;
@@ -152,6 +155,9 @@ body {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* 日本語の行頭禁則を厳密に（小書き仮名や長音記号が行頭に来るのを防ぐ） */
+  line-break: strict;
+  overflow-wrap: break-word;
 }
 
 ::selection {
@@ -178,6 +184,24 @@ html {
   font-size: 1rem;
   color: var(--foreground);
   max-width: none;
+}
+
+/* 記事タイトル（章番号つき。本文の H1 は stripTitle で落としてここで描画する） */
+.doc-title {
+  display: flex;
+  gap: 0.7rem;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+  scroll-margin-top: 5rem;
+}
+.doc-title-num {
+  flex: none;
+  color: var(--muted-2);
+  font-variant-numeric: tabular-nums;
 }
 
 .prose-manual h1 {
@@ -285,16 +309,37 @@ html {
   font-size: inherit;
 }
 
-/* テーブル: 罫線基調で囲み、横スクロール可能に */
-.prose-manual table {
-  width: 100%;
-  border-collapse: collapse;
+/* テーブル: 罫線基調で囲み、狭い画面ではコンテナごと横スクロールさせる。
+   table 自体を display:block + overflow-x にすると min-width が効かず、
+   狭い画面でセルが数文字ずつに潰れてしまうため、必ずラッパで包む。 */
+.table-scroll {
   margin: 1.25rem 0;
-  font-size: 0.9rem;
-  display: block;
   overflow-x: auto;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
+  -webkit-overflow-scrolling: touch;
+  /* 左右端の影は「まだ続きがある」ことだけを示す機能的な表示。
+     カバー(local)と影(scroll)を重ね、端まで送ると影が消える。 */
+  background:
+    linear-gradient(to right, var(--surface), transparent) left / 20px 100%
+      no-repeat local,
+    linear-gradient(to left, var(--surface), transparent) right / 20px 100%
+      no-repeat local,
+    radial-gradient(farthest-side at 0 50%, var(--scroll-shade), transparent)
+      left / 10px 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, var(--scroll-shade), transparent)
+      right / 10px 100% no-repeat scroll;
+}
+.prose-manual table,
+table.book-revisions {
+  display: table;
+  width: 100%;
+  /* これ未満には縮めない（縮むと日本語が 1 行数文字になって読めない） */
+  min-width: 28rem;
+  border-collapse: collapse;
+  margin: 0;
+  border: 0;
+  font-size: 0.9rem;
 }
 .prose-manual th,
 .prose-manual td {
@@ -391,54 +436,406 @@ html {
 
 /* =========================================================
    Book View（PDF/通し読み用）
+   構成: 表紙 → 改訂履歴 → 目次 → 章扉 → 記事
+   印刷の規範は DESIGN.md「印刷・PDF」を参照。
    ========================================================= */
-.book-view article + article {
-  padding-top: 2rem;
+.book {
+  --book-width: 44rem;
+}
+
+.book-cover,
+.book-front,
+.book-chapter-opener,
+.book-article {
+  max-width: var(--book-width);
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+/* ---------- 表紙 ---------- */
+.book-cover {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-block: 4rem;
+}
+.book-cover-logo {
+  height: 28px;
+  width: auto;
+}
+.book-cover-main {
+  padding-block: 2rem;
+}
+.book-cover-eyebrow {
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.book-cover-title {
+  margin-top: 0.75rem;
+  font-size: 2.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+.book-cover-role {
+  margin-top: 1.25rem;
+  border-top: 1px solid var(--line-strong);
+  padding-top: 1.25rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+.book-cover-desc {
+  margin-top: 0.4rem;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+.book-cover-meta {
+  display: grid;
+  gap: 0.5rem;
+  border-top: 1px solid var(--line);
+  padding-top: 1.25rem;
+  font-size: 0.85rem;
+}
+.book-cover-meta > div {
+  display: flex;
+  gap: 1rem;
+}
+.book-cover-meta dt {
+  min-width: 4.5em;
+  color: var(--muted);
+}
+.book-cover-meta dd {
+  color: var(--foreground);
+}
+
+/* ---------- 前付けページ（改訂履歴・目次） ---------- */
+.book-front {
+  padding-block: 3.5rem;
+}
+.book-front-title {
+  margin-bottom: 1.75rem;
+  border-bottom: 2px solid var(--line-strong);
+  padding-bottom: 0.5rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.book-revisions th,
+.book-revisions td {
+  border-bottom: 1px solid var(--line);
+  padding: 0.6rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+.book-revisions th {
+  border-bottom: 1px solid var(--line-strong);
+  color: var(--muted);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.book-revisions-version,
+.book-revisions-date {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 目次 ---------- */
+.toc,
+.toc-sublist {
+  margin: 0;
+  list-style: none;
+  padding: 0;
+}
+.toc-group + .toc-group {
+  margin-top: 1rem;
+}
+.toc-link {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  padding-block: 0.3rem;
+  color: var(--foreground);
+  text-decoration: none;
+}
+/* 番号は固定幅の欄に左揃え。章も節もタイトルの開始位置が揃う。 */
+.toc-num {
+  flex: none;
+  min-width: 2.6em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.toc-title {
+  flex: 0 1 auto;
+}
+.toc-dots {
+  flex: 1 1 auto;
+  min-width: 1.5rem;
+  border-bottom: 1px dotted var(--line-strong);
+  transform: translateY(-0.3em);
+}
+/* ページ番号は 2 パス目に注入される。桁が増えても行幅が動かないよう固定幅。 */
+.toc-page {
+  flex: none;
+  min-width: 2.6em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.toc-row-chapter .toc-link {
+  font-weight: 600;
+}
+.toc-row-chapter .toc-num,
+.toc-row-chapter .toc-page {
+  color: var(--foreground);
+}
+
+/* ---------- 章扉 ---------- */
+.book-chapter-opener {
+  padding-block: 4rem 3rem;
+}
+.book-chapter-title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.book-chapter-num {
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+.book-chapter-name {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+.book-chapter-contents {
+  margin-top: 2rem;
+  border-top: 1px solid var(--line);
+  padding-top: 1.25rem;
+  list-style: none;
+  font-size: 0.95rem;
+}
+.book-chapter-contents li {
+  display: flex;
+  gap: 0.55rem;
+  padding-block: 0.28rem;
+  color: var(--muted);
+}
+.book-chapter-contents-num {
+  min-width: 2.6em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 記事 ---------- */
+.book-article {
+  padding-block: 3rem;
+}
+.book-article-title {
+  display: flex;
+  gap: 0.7rem;
+  margin-bottom: 1.75rem;
+  font-size: 1.85rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+.book-article-num {
+  flex: none;
+  color: var(--muted-2);
+  font-variant-numeric: tabular-nums;
 }
 
 /* =========================================================
    Print
    ========================================================= */
 @media print {
-  :root {
+  /* .dark（クラスセレクタ）に詳細度で負けないよう :root.dark も同時に上書きする。
+     これがないと html.dark のまま印刷したときに背景が暗いまま出る。 */
+  :root,
+  :root.dark {
     --background: #fff;
-    --foreground: #000;
+    --foreground: #1a1a1a;
     --surface: #fff;
-    --surface-2: #f5f5f5;
-    --line: #ddd;
-    --line-strong: #bbb;
-    --accent: #333;
-    --accent-ink: #222;
-    --accent-soft: #f5f5f5;
-    --callout-note-bg: #f5f5f4;
-    --callout-tip-bg: #f5f5f4;
-    --callout-warning-bg: #f5f5f4;
-    --callout-step-bg: #f5f5f4;
+    --surface-2: #f4f4f2;
+    --surface-3: #ebebe8;
+    --muted: #5c5a54;
+    --muted-2: #85837c;
+    --line: #dcdcd8;
+    --line-strong: #b4b2ab;
+    --accent: #1a1a1a;
+    --accent-ink: #1a1a1a;
+    --accent-soft: #f4f4f2;
+    --code-bg: #f4f4f2;
+    --code-fg: #1a1a1a;
+    --pre-bg: #f4f4f2;
+    --pre-fg: #1a1a1a;
+    --callout-note-bg: #f6f6f4;
+    --callout-tip-bg: #f6f6f4;
+    --callout-warning-bg: #f6f6f4;
+    --callout-step-bg: #f6f6f4;
+    --callout-note-border: #b4b2ab;
+    --callout-tip-border: #b4b2ab;
+    --callout-warning-border: #4a4842;
+    --callout-step-border: #b4b2ab;
   }
 
   body {
-    font-size: 11pt;
+    font-size: 10.5pt;
     background: #fff;
-    color: #000;
+    color: var(--foreground);
+  }
+  /* rem は root(16px) 基準なので body の pt 指定が効かない。本文は明示的に pt で置く。 */
+  .prose-manual {
+    font-size: 10.5pt;
+    line-height: 1.7;
   }
 
-  .prose-manual h1 {
-    page-break-before: always;
+  /* 判型は Playwright 側（A4 / 余白 20mm）に一本化する。
+     ここで @page を指定すると設定が二重管理になるため置かない。 */
+
+  /* ---- 幅: 版面いっぱいに使う（画面用の中央寄せカラムは解除） ---- */
+  .book-cover,
+  .book-front,
+  .book-chapter-opener,
+  .book-article {
+    max-width: none;
+    padding-inline: 0;
   }
-  .prose-manual h1:first-child {
-    page-break-before: auto;
+
+  /* ---- 改ページ ---- */
+  .book-cover {
+    /* A4（297mm）から上下余白 20mm ずつを引いた版面高 */
+    min-height: 0;
+    height: 253mm;
+    padding-block: 0;
+    break-after: page;
   }
+  .book-front {
+    padding-block: 0;
+    break-after: page;
+  }
+  .book-chapter-opener {
+    padding-block: 0 0;
+    break-before: page;
+  }
+  .book-article {
+    padding-block: 0;
+    break-before: page;
+  }
+  .book-article-title,
+  .book-chapter-title,
+  .book-front-title,
   .prose-manual h2,
   .prose-manual h3 {
-    page-break-after: avoid;
+    break-after: avoid;
   }
   .callout,
+  .figure,
+  .prose-manual figure,
   .prose-manual img,
-  .prose-manual table {
-    page-break-inside: avoid;
+  .prose-manual tr {
+    break-inside: avoid;
   }
-  .book-view article {
-    page-break-inside: avoid;
+  p,
+  li {
+    orphans: 2;
+    widows: 2;
+  }
+
+  /* ---- 印刷時のタイポ階層（本文 10.5pt に対する比率で揃える） ---- */
+  .book-cover-title {
+    font-size: 32pt;
+  }
+  .book-cover-role {
+    font-size: 15pt;
+  }
+  .book-front-title {
+    font-size: 20pt;
+  }
+  .book-chapter-name {
+    font-size: 24pt;
+  }
+  .book-article-title {
+    font-size: 16pt;
+    margin-bottom: 1.4rem;
+  }
+  .prose-manual h2 {
+    font-size: 13pt;
+    margin-top: 1.6rem;
+    margin-bottom: 0.6rem;
+  }
+  .prose-manual h3 {
+    font-size: 11.5pt;
+    margin-top: 1.2rem;
+    margin-bottom: 0.4rem;
+  }
+  /* 目次は 1 ページに収まる密度に詰める（最長の admin が基準） */
+  .toc-link {
+    padding-block: 0.13rem;
+  }
+  .toc-group + .toc-group {
+    margin-top: 0.5rem;
+  }
+  .book-front-title {
+    margin-bottom: 1.25rem;
+  }
+  .book-chapter-contents {
+    font-size: 10pt;
+  }
+  .book-cover-meta {
+    font-size: 9.5pt;
+  }
+
+  /* ---- テーブル: 画面はスクロール、印刷は折り返して版面に収める ---- */
+  .table-scroll {
+    overflow: visible;
+    /* スクロール可能を示す端の影は紙では意味がない */
+    background: none;
+  }
+  .prose-manual table,
+  table.book-revisions {
+    display: table;
+    width: 100%;
+    /* 紙ではスクロールできないので min-width を解除して必ず版面に収める */
+    min-width: 0;
+    table-layout: fixed;
+    font-size: 8.5pt;
+    overflow: visible;
+    border-radius: 0;
+  }
+  .prose-manual th,
+  .prose-manual td {
+    padding: 0.35rem 0.5rem;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+  .prose-manual th {
+    white-space: normal;
+  }
+  .book-revisions {
+    font-size: 9pt;
+  }
+
+  /* ---- 図版: 1 ページに収まる高さに制限する ----
+     画面全体のスクリーンショット（4:3〜16:10）が版面幅いっぱいに載る高さにする。
+     ここを小さくしすぎると画面内の文字が読めなくなる。 */
+  .prose-manual figure img,
+  .prose-manual > img {
+    max-height: 115mm;
+    width: auto;
+  }
+  /* 未撮影プレースホルダは印刷では破線をやめ、控えめな実線枠にする */
+  .figure-placeholder {
+    border-style: solid;
+    border-color: var(--line);
+    min-height: 28mm;
   }
 
   /* サイトのクロームは印刷しない */
@@ -453,9 +850,5 @@ html {
   a {
     color: inherit;
     text-decoration: none;
-  }
-
-  @page {
-    margin: 2cm;
   }
 }

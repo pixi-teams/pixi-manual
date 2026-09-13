@@ -31,7 +31,7 @@ export const Figure = ({ src, alt, caption }: FigureProps) => {
         <div
           role="img"
           aria-label={`スクリーンショット準備中${alt ? `：${alt}` : ""}`}
-          className="grid min-h-40 place-items-center rounded-md border border-dashed border-line-strong bg-surface-2 px-4 text-center text-sm text-muted"
+          className="figure-placeholder grid min-h-40 place-items-center rounded-md border border-dashed border-line-strong bg-surface-2 px-4 text-center text-sm text-muted"
         >
           <span className="inline-flex items-center gap-2">
             <svg

@@ -58,6 +58,16 @@ const extractTitle = (content: string): string => {
 };
 
 /**
+ * Markdown 本文から先頭の H1（記事タイトル）を取り除く。
+ * タイトルは章番号つきで呼び出し側が描画するため、本文からは落とす。
+ * @param content Markdown 本文
+ * @returns H1 を除いた本文
+ */
+export const stripTitle = (content: string): string => {
+  return content.replace(/^\s*#\s+.+?\r?\n/, "").replace(/^\s*\n/, "");
+};
+
+/**
  * ファイル名から表示順（連番）を抽出する
  * @param filename ファイル名
  * @returns 順番
@@ -113,8 +123,9 @@ export const getDocsBySections = (sectionDirs: string[]): DocEntry[] => {
  * ロール別に対応するセクションディレクトリ
  */
 export const roleSections: Record<string, string[]> = {
-  customer: ["10-web-reservation"],
+  customer: ["00-customer-intro", "10-web-reservation"],
   cast: [
+    "00-cast-intro",
     "20-cast-basics",
     "30-cast-schedule-shift",
     "40-cast-reservations",
@@ -122,6 +133,7 @@ export const roleSections: Record<string, string[]> = {
     "60-cast-report-mypage",
   ],
   admin: [
+    "00-admin-intro",
     "30-admin-basics",
     "40-admin-operations",
     "50-admin-management",
@@ -134,6 +146,10 @@ export const roleSections: Record<string, string[]> = {
  * セクション名の表示ラベル
  */
 export const sectionLabels: Record<string, string> = {
+  // 前付け（各ロール共通の枠。記事テンプレの適用外）
+  "00-customer-intro": "本マニュアルについて",
+  "00-cast-intro": "本マニュアルについて",
+  "00-admin-intro": "本マニュアルについて",
   "10-web-reservation": "Web予約",
   // cast（pixi-cast アプリ）
   "20-cast-basics": "はじめに・基本操作",

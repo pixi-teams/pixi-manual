@@ -7,7 +7,9 @@ import {
   getRoleMeta,
   extractHeadings,
   sectionLabels,
+  stripTitle,
 } from "@/lib/mdx";
+import { getChapterNumber, getDocNumber } from "@/lib/outline";
 import { AppShell } from "@/components/AppShell";
 import { MdxContent } from "@/components/MdxContent";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
@@ -55,18 +57,29 @@ export default async function ArticlePage({
 
   const headings = extractHeadings(doc.content);
   const { prev, next } = getAdjacentDocs(role, section, slug);
+  const chapterNumber = getChapterNumber(role, section);
+  const docNumber = getDocNumber(role, section, slug);
+  const sectionLabel = sectionLabels[section] ?? section;
 
   return (
     <AppShell role={role} headings={headings}>
       <Breadcrumbs
         items={[
           { label: roleMeta.label, href: `/docs/${role}` },
-          { label: sectionLabels[section] ?? section },
-          { label: doc.title },
+          {
+            label: chapterNumber
+              ? `${chapterNumber} ${sectionLabel}`
+              : sectionLabel,
+          },
+          { label: docNumber ? `${docNumber} ${doc.title}` : doc.title },
         ]}
       />
       <div data-pagefind-body>
-        <MdxContent source={doc.content} />
+        <h1 className="doc-title">
+          {docNumber && <span className="doc-title-num">{docNumber}</span>}
+          <span>{doc.title}</span>
+        </h1>
+        <MdxContent source={stripTitle(doc.content)} />
       </div>
       <PrevNext prev={prev} next={next} />
     </AppShell>
