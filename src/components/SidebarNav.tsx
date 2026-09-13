@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { NavSection, RoleMeta } from "@/lib/mdx";
+import type { RoleMeta } from "@/lib/mdx";
+import type { OutlineChapter } from "@/lib/outline";
 
 interface SidebarNavProps {
   role: string;
   roles: RoleMeta[];
-  nav: NavSection[];
+  /** 章番号つきの章立て */
+  outline: OutlineChapter[];
   /** モバイルドロワーで項目タップ時に閉じるためのコールバック */
   onNavigate?: () => void;
 }
@@ -27,7 +29,7 @@ const normalize = (p: string): string =>
 export const SidebarNav = ({
   role,
   roles,
-  nav,
+  outline,
   onNavigate,
 }: SidebarNavProps) => {
   const pathname = normalize(usePathname());
@@ -64,27 +66,31 @@ export const SidebarNav = ({
 
       {/* 章 → 記事ツリー */}
       <nav className="flex flex-col gap-5">
-        {nav.map((sectionNav) => (
-          <div key={sectionNav.section}>
-            <p className="mb-1.5 px-1 text-xs font-semibold uppercase tracking-wide text-muted-2">
-              {sectionNav.label}
+        {outline.map((chapter) => (
+          <div key={chapter.anchorId}>
+            <p className="mb-1.5 flex gap-2 px-1 text-xs font-semibold tracking-wide text-muted-2">
+              <span className="w-5 shrink-0 tabular-nums">{chapter.number}</span>
+              <span>{chapter.title}</span>
             </p>
             <ul className="flex flex-col gap-0.5">
-              {sectionNav.items.map((item) => {
-                const active = pathname === normalize(item.href);
+              {chapter.sections.map((section) => {
+                const active = pathname === normalize(section.href);
                 return (
-                  <li key={item.slug}>
+                  <li key={section.slug}>
                     <Link
-                      href={item.href}
+                      href={section.href}
                       onClick={onNavigate}
                       aria-current={active ? "page" : undefined}
-                      className={`block rounded-md px-2.5 py-1.5 text-sm transition-colors ${
+                      className={`flex gap-2 rounded-md px-2.5 py-1.5 text-sm transition-colors ${
                         active
                           ? "bg-surface-2 font-medium text-fg"
                           : "text-muted hover:bg-surface-2 hover:text-fg"
                       }`}
                     >
-                      {item.title}
+                      <span className="shrink-0 tabular-nums text-muted-2">
+                        {section.number}
+                      </span>
+                      <span>{section.title}</span>
                     </Link>
                   </li>
                 );

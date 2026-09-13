@@ -1,3 +1,4 @@
+import type { ComponentPropsWithoutRef } from "react";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
@@ -8,10 +9,24 @@ interface MdxContentProps {
   source: string;
 }
 
+/**
+ * 表を横スクロール可能なコンテナで包む。
+ * 包まずに table 自体を overflow させると、狭い画面でセルが数文字ずつに
+ * 潰れて読めなくなる（table の min-width が効かないため）。
+ * @param props table 要素の props
+ * @returns スクロールコンテナに包まれた table
+ */
+const ScrollableTable = (props: ComponentPropsWithoutRef<"table">) => (
+  <div className="table-scroll">
+    <table {...props} />
+  </div>
+);
+
 /** MDX から利用できるカスタムコンポーネント */
 const components = {
   Callout,
   Figure,
+  table: ScrollableTable,
 };
 
 /**

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Portal } from "./Portal";
 
 /** Pagefind の検索結果 1 件 */
 interface SearchResult {
@@ -141,73 +142,75 @@ export const SearchDialog = () => {
       </button>
 
       {open && (
-        <div
-          className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 px-4 pt-[12vh] backdrop-blur-sm"
-          onClick={() => setOpen(false)}
-        >
+        <Portal>
           <div
-            role="dialog"
-            aria-modal="true"
-            aria-label="マニュアル内を検索"
-            className="w-full max-w-xl overflow-hidden rounded-lg border border-line bg-surface shadow-[var(--shadow)]"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-[60] flex items-start justify-center bg-black/40 px-4 pt-[12vh] backdrop-blur-sm"
+            onClick={() => setOpen(false)}
           >
-            <div className="flex items-center gap-2 border-b border-line px-4">
-              <svg
-                width="17"
-                height="17"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                className="text-muted"
-                aria-hidden
-              >
-                <circle cx="11" cy="11" r="7" />
-                <path d="m21 21-4.3-4.3" />
-              </svg>
-              <input
-                autoFocus
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="マニュアルを検索…"
-                className="w-full bg-transparent py-3.5 text-sm text-fg outline-none placeholder:text-muted-2"
-              />
-            </div>
-            <div className="max-h-[55vh] overflow-y-auto p-2">
-              {loading && (
-                <p className="px-3 py-6 text-center text-sm text-muted">
-                  検索中…
-                </p>
-              )}
-              {!loading && query.trim() && results.length === 0 && (
-                <p className="px-3 py-6 text-center text-sm text-muted">
-                  該当する項目が見つかりませんでした
-                </p>
-              )}
-              <ul className="flex flex-col">
-                {results.map((r, i) => (
-                  <li key={i}>
-                    <a
-                      href={r.url}
-                      className="block rounded-md px-3 py-2.5 transition-colors hover:bg-surface-2"
-                      onClick={() => setOpen(false)}
-                    >
-                      <span className="block text-sm font-medium text-fg">
-                        {r.title}
-                      </span>
-                      <span
-                        className="mt-0.5 block text-xs text-muted [&_mark]:bg-accent-soft [&_mark]:text-accent-ink"
-                        dangerouslySetInnerHTML={{ __html: r.excerpt }}
-                      />
-                    </a>
-                  </li>
-                ))}
-              </ul>
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-label="マニュアル内を検索"
+              className="w-full max-w-xl overflow-hidden rounded-lg border border-line bg-surface shadow-[var(--shadow)]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center gap-2 border-b border-line px-4">
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  className="text-muted"
+                  aria-hidden
+                >
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="m21 21-4.3-4.3" />
+                </svg>
+                <input
+                  autoFocus
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="マニュアルを検索…"
+                  className="w-full bg-transparent py-3.5 text-sm text-fg outline-none placeholder:text-muted-2"
+                />
+              </div>
+              <div className="max-h-[55vh] overflow-y-auto p-2">
+                {loading && (
+                  <p className="px-3 py-6 text-center text-sm text-muted">
+                    検索中…
+                  </p>
+                )}
+                {!loading && query.trim() && results.length === 0 && (
+                  <p className="px-3 py-6 text-center text-sm text-muted">
+                    該当する項目が見つかりませんでした
+                  </p>
+                )}
+                <ul className="flex flex-col">
+                  {results.map((r, i) => (
+                    <li key={i}>
+                      <a
+                        href={r.url}
+                        className="block rounded-md px-3 py-2.5 transition-colors hover:bg-surface-2"
+                        onClick={() => setOpen(false)}
+                      >
+                        <span className="block text-sm font-medium text-fg">
+                          {r.title}
+                        </span>
+                        <span
+                          className="mt-0.5 block text-xs text-muted [&_mark]:bg-accent-soft [&_mark]:text-accent-ink"
+                          dangerouslySetInnerHTML={{ __html: r.excerpt }}
+                        />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
+        </Portal>
       )}
     </>
   );

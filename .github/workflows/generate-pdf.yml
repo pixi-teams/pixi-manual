@@ -43,18 +43,43 @@ jobs:
 
       - name: Start server and generate PDFs
         run: |
-          # Start a simple static file server for the exported site
-          npx -y serve@latest out -l 3000 &
+          # next.config.ts は GITHUB_ACTIONS 環境で basePath=/pixi-manual を付けるが、
+          # export された out/ 自体に basePath のディレクトリは作られない。
+          # そのため out/ を _site/pixi-manual/ に置いてからルートを公開する。
+          # （ここを揃えないと PDF 生成が 404 ページを印刷してしまう）
+          mkdir -p _site/pixi-manual
+          cp -a out/. _site/pixi-manual/
+          npx -y serve@latest _site -l 3000 &
           SERVER_PID=$!
 
-          # Wait for server to be ready
-          sleep 3
+          # サーバーの待機は generate-pdf.ts 側で book ページの 200 を確認する
+          pnpm pdf
 
-          # Generate PDFs
-          pnpm exec tsx scripts/generate-pdf.ts
-
-          # Stop server
           kill $SERVER_PID
+
+      - name: Sanity check PDFs
+        run: |
+          # 404 ページを 1 枚だけ出力していた事故の再発防止。
+          # 中身が空でないこと（十分なページ数があること）を確認する。
+          shopt -s nullglob
+          files=(public/manuals/*.pdf)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "::error::PDF が 1 つも生成されていません"
+            exit 1
+          fi
+          for f in "${files[@]}"; do
+            pages=$(node -e "
+              const fs=require('fs');
+              const s=fs.readFileSync(process.argv[1],'latin1');
+              const m=[...s.matchAll(/\/Type\s*\/Page[^s]/g)];
+              console.log(m.length);
+            " "$f")
+            echo "$f: ${pages} pages"
+            if [ "$pages" -lt 5 ]; then
+              echo "::error::$f のページ数が ${pages} しかありません（404 ページを印刷した可能性）"
+              exit 1
+            fi
+          done
 
       - name: Upload PDFs as artifacts
         uses: actions/upload-artifact@v4

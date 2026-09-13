@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { roles, roleSections, sectionLabels } from "@/lib/mdx";
+import { formatIssuedAt, formatVersion, manualMeta } from "@content/manual-meta";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const metadata: Metadata = {
@@ -94,8 +95,14 @@ export default function HomePage() {
       </main>
 
       <footer className="border-t border-line">
-        <div className="mx-auto max-w-5xl px-6 py-6 text-sm text-muted">
-          &copy; {new Date().getFullYear()} pixi — マニュアル
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-2 px-6 py-6 text-sm text-muted">
+          <span>
+            &copy; {new Date().getFullYear()} {manualMeta.publisher}
+          </span>
+          <span className="text-muted-2">
+            {formatVersion(manualMeta.version)}・
+            {formatIssuedAt(manualMeta.issuedAt)}発行
+          </span>
         </div>
       </footer>
     </div>

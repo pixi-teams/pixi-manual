@@ -57,28 +57,46 @@ pixi-manual は **main に `manual-vX.Y.Z` タグを push すると**、`.github
    - 省略時: `git log <最新タグ>..HEAD --oneline` を見て、上の SemVer 表に沿って種別を推定し提案する。
 3. 新タグが未使用であること: `git rev-parse -q --verify "refs/tags/<新タグ>"` が何も返さない（= 存在しない）ことを確認する。既に在れば別バージョンにする。
 
-### 3. タグメッセージの下書き
-- `git log <最新タグ>..HEAD --oneline` の内容を、日本語で簡潔なリリースノートに要約する（主な追加・変更を箇条書き）。
+### 3. マニュアルメタの更新（タグより先・必須）
+`content/manual-meta.ts` は **表紙・改訂履歴ページ・PDF のフッター・PDF のファイル名** の正本。
+タグと食い違うと納品物に古い版数が印字されるため、タグを打つ**前に** main へ反映しておく。
 
-### 4. 確認ゲート（必須・不可逆）
+1. `content/manual-meta.ts` を開き、次を更新する:
+   - `version`: 新タグから `manual-v` を除いた値（例: `manual-v0.5.0` → `"0.5.0"`）
+   - `issuedAt`: 発行日（`YYYY-MM-DD`）
+   - `revisions`: 先頭に今回の版を追加（`version` / `date` / `summary`。summary は手順 4 のリリースノート要約）
+2. 変更は**別コミット（または PR）で main に入れてから**タグを打つ。
+   - すでに作業ツリーがクリーンである前提（手順 1-3）なので、ここで直接コミットしてよいかはユーザーに確認する。
+3. 更新後に `pnpm build` を再実行して通ることを確認する。
+
+<!-- ここを飛ばすと、表紙に前の版数が出た PDF が Release に添付される -->
+
+### 4. タグメッセージの下書き
+- `git log <最新タグ>..HEAD --oneline` の内容を、日本語で簡潔なリリースノートに要約する（主な追加・変更を箇条書き）。
+- `manual-meta.ts` の `revisions` に書いた summary と食い違わないようにする。
+
+### 5. 確認ゲート（必須・不可逆）
 push は取り消しにくく、push 即 CI（PDF生成 + Release 作成）が走る。**次を提示してユーザーの明示的な許可を得るまで、タグ作成・push はしない。**
 - 作成する新タグ名（例 `manual-v0.1.9`）
 - 指す対象コミット（`git rev-parse --short HEAD` の SHA と件名）
 - 選んだ種別（patch/minor/major）とその理由
-- 前タグ以降の変更サマリ（手順3の下書き）
+- 前タグ以降の変更サマリ（手順 4 の下書き）
+- `content/manual-meta.ts` の `version` が新タグと一致していること
 - 「push すると PDF 生成と GitHub Release が自動で走る」旨
 
-### 5. タグ作成 & push
+### 6. タグ作成 & push
 確認が取れたら実行する:
 ```bash
 git tag -a <新タグ> -m "<リリースノート>"
 git push origin <新タグ>
 ```
 
-### 6. 事後案内
+### 7. 事後案内
 - CI の進捗を案内する: `gh run list --workflow=generate-pdf.yml -L 3` / `gh run watch`
 - 完了後の Release 確認: `gh release view <新タグ> --web`
-- 生成される PDF: `pixi-manual-customer.pdf` / `pixi-manual-cast.pdf` / `pixi-manual-admin.pdf`（Release からダウンロードして営業配布）。
+- 生成される PDF: `pixi-manual-{customer,cast,admin}-v<X.Y.Z>.pdf`（Release からダウンロードして営業配布）。
+- **中身を必ず 1 度は開いて確認する**。ワークフローにページ数のサニティチェックは入っているが、
+  表紙の版数・発行日・目次のページ番号が正しいかは目視で確認する。
 
 ## 安全上の注意
 - 既存タグは**削除・移動しない**。push 済みタグを付け替えると履歴が壊れ、CI も再発火する。
