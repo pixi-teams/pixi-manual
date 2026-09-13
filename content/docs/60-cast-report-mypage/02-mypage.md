@@ -22,7 +22,7 @@
 4. 「登録SNS」の「追加」を押すと、SNSの種類（X・Instagram・Bluesky・lit.link・Relaxi・02）とURLを登録できます
 5. 登録済みのSNSは、ゴミ箱アイコンから削除できます
 
-<Figure alt="プロフィールタブの基本情報とSNS登録" caption="基本情報の編集とSNSの追加・削除ができます" />
+<Figure src="/manuals/cast/60-cast-report-mypage/02-mypage/01-profile-tab.jpg" alt="プロフィールタブの基本情報とSNS登録" caption="基本情報の編集とSNSの追加・削除ができます" />
 
 ### コース・オプションタブ
 1. 「コース・オプション」タブを選びます
@@ -32,7 +32,7 @@
 このタブは閲覧のみです。対応・NGの内容の変更は店舗側で設定します。
 </Callout>
 
-<Figure alt="コース・オプションタブの表示" caption="対応・NGのコースとオプションを確認できます" />
+<Figure src="/manuals/cast/60-cast-report-mypage/02-mypage/02-course-tab.jpg" alt="コース・オプションタブの表示" caption="対応・NGのコースとオプションを確認できます" />
 
 ### ログイン情報タブ
 1. 「ログイン情報」タブを選びます
@@ -43,7 +43,7 @@
 権限設定は確認のみです。権限の変更は店舗側で行います。
 </Callout>
 
-<Figure alt="ログイン情報タブと権限設定" caption="ログイン情報と権限（許可／不可）を確認できます" />
+<Figure src="/manuals/cast/60-cast-report-mypage/02-mypage/03-login-tab.jpg" alt="ログイン情報タブと権限設定" caption="ログイン情報と権限（許可／不可）を確認できます" />
 
 ## 確認ポイント
 - 基本情報やSNSを保存・追加した後、内容が反映されていること

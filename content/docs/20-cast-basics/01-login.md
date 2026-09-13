@@ -22,14 +22,14 @@
 4. 「Password」にパスワードを入力します（目のアイコンで入力内容を確認できます）
 5. 「Log in」を押します
 
-<Figure alt="ログイン画面" caption="店舗コード・ID・パスワードを入力して「Log in」を押します" />
+<Figure src="/manuals/cast/20-cast-basics/01-login/01-login-form.jpg" alt="ログイン画面" caption="店舗コード・ID・パスワードを入力して「Log in」を押します" />
 
 ### Googleアカウントでログインする
 1. 先に「Store Code」に店舗コードを入力します
 2. 画面下の「Google」ボタンを押します
 3. Googleの画面が開くので、アカウントを選んで進みます
 
-<Figure alt="Googleログインのボタン" caption="店舗コードを入力してから「Google」を押します" />
+<Figure src="/manuals/cast/20-cast-basics/01-login/02-social-login.jpg" alt="Googleログインのボタン" caption="店舗コードを入力してから「Google」を押します" />
 
 <Callout type="tip">
 Googleログインでも店舗コードの入力は必要です。店舗コードが空のままGoogleを押すと「店舗コードを入力してください。」と表示されます。
