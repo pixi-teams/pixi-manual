@@ -9,7 +9,8 @@
     "serve": "npx -y serve@latest out -l 3000",
     "pdf": "tsx scripts/generate-pdf.ts",
     "shots:admin": "tsx scripts/capture-admin-screenshots.ts",
-    "lint": "eslint"
+    "lint": "eslint",
+    "shots:cast": "tsx scripts/capture-cast-screenshots.ts"
   },
   "dependencies": {
     "github-slugger": "^2.0.0",

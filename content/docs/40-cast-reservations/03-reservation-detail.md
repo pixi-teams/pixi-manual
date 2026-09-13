@@ -19,7 +19,7 @@
 2. お名前・フリガナ・電話番号・メールアドレスを修正します
 3. 「保存」を押します（やめる場合は「キャンセル」）
 
-<Figure alt="お客様情報セクションの編集" caption="お名前・フリガナ・電話番号・メールアドレスを編集できます" />
+<Figure src="/manuals/cast/40-cast-reservations/03-reservation-detail/01-detail-customer.jpg" alt="お客様情報セクションの編集" caption="お名前・フリガナ・電話番号・メールアドレスを編集できます" />
 
 ### 予約内容を編集する
 1. 「予約内容」の「編集」を押します
@@ -34,7 +34,7 @@
 ルームは表示のみで、この画面からは変更できません。
 </Callout>
 
-<Figure alt="予約内容セクションの編集" caption="日時・ステータス・コース・オプションなどを編集できます" />
+<Figure src="/manuals/cast/40-cast-reservations/03-reservation-detail/02-detail-service.jpg" alt="予約内容セクションの編集" caption="日時・ステータス・コース・オプションなどを編集できます" />
 
 ### 支払い情報を編集する
 1. 「支払い情報」の「編集」を押します
@@ -45,7 +45,7 @@
 店舗割引額は表示のみで、この画面からは変更できません。金額の内訳（コース・オプション・延長・割引）と合計金額もあわせて確認できます。
 </Callout>
 
-<Figure alt="支払い情報セクションの編集" caption="支払い方法を選べます。店舗割引額は表示のみです" />
+<Figure src="/manuals/cast/40-cast-reservations/03-reservation-detail/03-detail-payment.jpg" alt="支払い情報セクションの編集" caption="支払い方法を選べます。店舗割引額は表示のみです" />
 
 ### 予約を削除する
 1. 画面下の「この予約を削除する」を押します
@@ -56,7 +56,7 @@
 削除は取り消せません。編集中は削除できないため、先に編集を保存またはキャンセルしてください。
 </Callout>
 
-<Figure alt="予約削除の確認ダイアログ" caption="確認ダイアログで「削除する」を押すと予約が削除されます" />
+<Figure src="/manuals/cast/40-cast-reservations/03-reservation-detail/04-detail-bottom.jpg" alt="予約削除の確認ダイアログ" caption="確認ダイアログで「削除する」を押すと予約が削除されます" />
 
 ## 確認ポイント
 - 保存後、変更した内容が画面に反映されていること

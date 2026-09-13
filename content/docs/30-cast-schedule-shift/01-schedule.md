@@ -19,7 +19,7 @@
 1. スマホは下部メニューの「スケジュール」、PCはサイドバーの「スケジュール」を押します
 2. カレンダーに自分の予定が表示されます
 
-<Figure alt="スケジュール画面" caption="自分のスケジュールがカレンダーで表示されます" />
+<Figure src="/manuals/cast/30-cast-schedule-shift/01-schedule/01-schedule.jpg" alt="スケジュール画面" caption="自分のスケジュールがカレンダーで表示されます" />
 
 ### 表示を切り替える・日付を移動する
 1. 画面上の切り替えで「1日」「3日」「週」を選べます
@@ -27,17 +27,17 @@
 3. 「今日」を押すと今日の表示に戻ります
 4. ミニカレンダーの日付を押すと、その日に移動できます
 
-<Figure alt="表示の切り替えと日付移動" caption="「1日」「3日」「週」の切り替えや前後移動ができます" />
+<Figure src="/manuals/cast/30-cast-schedule-shift/01-schedule/02-view-switch.jpg" alt="表示の切り替えと日付移動" caption="「1日」「3日」「週」の切り替えや前後移動ができます" />
 
 ### 予定の詳細を見る
 カレンダー上の予約の予定を押すと、詳細のポップアップが表示されます。
 
-<Figure alt="予約詳細のポップアップ" caption="予約を押すと詳細が表示されます" />
+<Figure src="/manuals/cast/30-cast-schedule-shift/01-schedule/03-event-popover.jpg" alt="予約詳細のポップアップ" caption="予約を押すと詳細が表示されます" />
 
 ### 新しい予約を作成する
 「新規予約を作成」のボタンから、新しい予約の作成画面に進めます。
 
-<Figure alt="新規予約を作成ボタン" caption="スケジュール画面から新規予約を作成できます" />
+<Figure src="/manuals/cast/30-cast-schedule-shift/01-schedule/04-create-button.jpg" alt="新規予約を作成ボタン" caption="スケジュール画面から新規予約を作成できます" />
 
 <Callout type="note">
 カレンダー上で予定を直接編集することはできません。この画面は確認が中心で、内容の変更は予約の画面から行います。

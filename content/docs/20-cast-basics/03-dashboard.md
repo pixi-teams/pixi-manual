@@ -18,17 +18,17 @@
 1. スマホは下部メニューの「ホーム」、PCはサイドバーの「ダッシュボード」を押します
 2. 画面の上部に今日の日付が表示されます
 
-<Figure alt="ホーム画面の日付表示" caption="画面上部に今日の日付が表示されます" />
+<Figure src="/manuals/cast/20-cast-basics/03-dashboard/01-date-header.jpg" alt="ホーム画面の日付表示" caption="画面上部に今日の日付が表示されます" />
 
 ### 売上サマリを見る
 画面には自分の売上サマリが表示されます。数字が表示されるまで少し時間がかかることがあります。
 
-<Figure alt="売上サマリの表示" caption="自分の売上サマリを確認できます" />
+<Figure src="/manuals/cast/20-cast-basics/03-dashboard/02-sales-summary.jpg" alt="売上サマリの表示" caption="自分の売上サマリを確認できます" />
 
 ### 今日の予約・シフトを見る
 画面を下にスクロールすると、今日の予約と今日のシフトが表示されます。
 
-<Figure alt="今日の予約とシフトの一覧" caption="今日の予約・シフトをまとめて確認できます" />
+<Figure src="/manuals/cast/20-cast-basics/03-dashboard/03-today-list.jpg" alt="今日の予約とシフトの一覧" caption="今日の予約・シフトをまとめて確認できます" />
 
 <Callout type="tip">
 スマホでは画面右下のピンクの「＋」ボタンから、その場で新規予約を作成できます。
